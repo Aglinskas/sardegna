@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sardegna Car Rental</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>/* Same road-book tokens as the trip overview and day sheets. */
+:root{
+  --paper:#F1F4F3; --card:#FFFFFF; --ink:#11292F; --muted:#56696E; --line:#D3DDDC;
+  --sea:#0A7B87; --sea-soft:#DCEDEE; --maquis:#4F6B3B; --maquis-soft:#E5EDDC;
+  --sign:#1D4FA3; --sign-soft:#E1E9F6; --sign-ink:#FFFFFF;
+  --route:#C9452E; --zain:#8B4A9C; --zain-soft:#F1E6F4; --warn:#8A5A00; --warn-soft:#F7EBD3;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --ui:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0D1719; --card:#142327; --ink:#E2ECEC; --muted:#93A7AA; --line:#27393D;
+  --sea:#4CC0CB; --sea-soft:#12343A; --maquis:#A0C283; --maquis-soft:#1C2A18;
+  --sign:#3466C4; --sign-soft:#16233D; --sign-ink:#FFFFFF;
+  --route:#F2694C; --zain:#CC9BDB; --zain-soft:#2A1D30; --warn:#E5B85C; --warn-soft:#2E2412; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0D1719; --card:#142327; --ink:#E2ECEC; --muted:#93A7AA; --line:#27393D;
+  --sea:#4CC0CB; --sea-soft:#12343A; --maquis:#A0C283; --maquis-soft:#1C2A18;
+  --sign:#3466C4; --sign-soft:#16233D; --sign-ink:#FFFFFF;
+  --route:#F2694C; --zain:#CC9BDB; --zain-soft:#2A1D30; --warn:#E5B85C; --warn-soft:#2E2412; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--sea);text-decoration-thickness:1px;text-underline-offset:2px}
+a:hover{text-decoration-thickness:2px}
+a:focus-visible,.btn:focus-visible{outline:2px solid var(--route);outline-offset:2px;border-radius:3px}
+h1,h2,h3,h4{text-wrap:balance;margin:0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.2em}
+li+li{margin-top:6px}
+.wrap{max-width:1000px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 56px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.eyebrow{font-family:var(--ui);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.crumbs{font-family:var(--ui);font-size:14px;padding-bottom:18px}
+
+/* header */
+.top{display:grid;gap:14px;padding-bottom:26px;border-bottom:1px solid var(--line)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(48px,9vw,96px);line-height:.9;letter-spacing:-.01em;text-transform:uppercase}
+h1 span{color:var(--sea)}
+.sub{max-width:64ch;font-size:19px}
+.facts{list-style:none;padding:0;margin:6px 0 0;display:flex;flex-wrap:wrap;gap:10px 30px;font-family:var(--ui)}
+.facts li{display:flex;flex-direction:column;margin:0}
+.facts b{font-family:var(--display);font-size:30px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.facts span{font-size:13px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+
+/* sections */
+.block{padding-top:44px;display:grid;gap:16px}
+.sec{font-family:var(--display);font-weight:600;font-size:clamp(30px,4.4vw,42px);text-transform:uppercase;letter-spacing:.01em;line-height:1}
+.lede{max-width:70ch}
+h3{font-family:var(--ui);font-size:18px;font-weight:600}
+
+/* verdict card */
+.verdict{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--sea);border-radius:8px;padding:20px 22px;display:grid;gap:14px}
+.verdict h2{font-family:var(--display);font-size:clamp(28px,4vw,38px);font-weight:600;line-height:1.05;text-transform:uppercase}
+.verdict ol{display:grid;gap:8px}
+.verdict ol li{margin:0}
+.pill{display:inline-block;font-family:var(--ui);font-size:12.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--sea-soft);color:var(--sea);vertical-align:middle}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.zain{background:var(--zain-soft);color:var(--zain)}
+.pill.green{background:var(--maquis-soft);color:var(--maquis)}
+
+/* buttons */
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--ui);font-weight:600;font-size:14.5px;padding:8px 13px;border-radius:5px;background:var(--sea);color:var(--paper);text-decoration:none;line-height:1.2}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--sea);box-shadow:inset 0 0 0 1.5px var(--sea)}
+
+/* cards grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px 18px;display:grid;gap:8px;align-content:start}
+.card.pick{border-top:4px solid var(--sea)}
+.card.alt{border-top:4px solid var(--line)}
+.card.zain{border-top:4px solid var(--zain)}
+.card .price{font-family:var(--display);font-size:34px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.card .price small{font-family:var(--ui);font-size:14px;font-weight:500;color:var(--muted)}
+.card p,.card li{font-size:16px}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:8px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-family:var(--ui);font-size:15px;min-width:620px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--paper)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.hl td{background:var(--sea-soft)}
+tr.total td{font-weight:600;border-top:2px solid var(--ink)}
+
+/* callouts */
+.note{border-radius:8px;padding:14px 16px;display:grid;gap:6px;font-size:16px}
+.note.warn{background:var(--warn-soft)}
+.note.warn b.h{color:var(--warn)}
+.note.info{background:var(--sign-soft)}
+.note.info b.h{color:var(--sign)}
+.note.zain{background:var(--zain-soft)}
+.note b.h{font-family:var(--ui);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+blockquote{margin:0;padding:10px 14px;border-left:3px solid var(--sea);background:var(--card);font-style:italic;font-size:16px}
+
+/* checklist */
+.steps{list-style:none;padding:0;counter-reset:s;display:grid;gap:10px}
+.steps li{counter-increment:s;position:relative;padding-left:44px;margin:0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--sign);color:var(--sign-ink);font-family:var(--display);font-weight:600;font-size:18px;display:grid;place-items:center}
+.steps li b{font-family:var(--ui)}
+
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px 28px}
+.foot{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);font-size:14px;color:var(--muted);display:grid;gap:8px}
+.foot ul{padding-left:1.1em}
+</style></head>
+<body><div class="wrap">
+
+<nav class="crumbs"><a href="sardegna-trip-v2.html">← Sardegna Road Trip V2</a></nav>
+
+<header class="top">
+  <div class="eyebrow">Sardegna V2 · car rental · prices checked Mon 26 Oct 2026</div>
+  <h1>The <span>car</span></h1>
+  <p class="sub">One small car from Cagliari airport, Fri 30 Oct to Sat 7 Nov. Short version: book <b>Avis at Cagliari Elmas (CAG)</b>, pay with the <b>Chase Sapphire Preferred</b>, and <b>say no to their extra cover</b> at the desk. About <b>$155–195 for the whole 8 days</b>, plus fuel.</p>
+  <ul class="facts">
+    <li><b>8 days</b><span>Fri 30 Oct → Sat 7 Nov</span></li>
+    <li><b>≈1,080 km</b><span>the whole loop</span></li>
+    <li><b>07:30</b><span>car back on Sat 7 Nov</span></li>
+    <li><b>$156–195</b><span>Avis, all taxes in</span></li>
+    <li><b>4 days</b><span>until pick-up: book today</span></li>
+  </ul>
+</header>
+
+<!-- ================= VERDICT ================= -->
+<section class="block" id="verdict">
+  <div class="verdict">
+    <span class="eyebrow">What to do</span>
+    <h2>Avis at CAG · Renault Captur (or Fiat Panda) · free-cancellation rate · Chase pays for damage</h2>
+    <ol>
+      <li><b>Book today on <a href="https://www.avis.com">avis.com</a>:</b> Cagliari Elmas Airport (CAG), pick-up <b>Fri 30 Oct 08:00</b>, return <b>Sat 7 Nov 07:30</b>. Choose <b>“Compact Manual – Renault Captur or similar”</b> on the <b>“Best for Flexibility”</b> rate: you pay at the desk and can cancel for free.</li>
+      <li><b>Book it in your own name and pay at the desk with the Chase Sapphire Preferred.</b> The card's car-rental cover only works if the whole rental goes on that card.</li>
+      <li><b>At the desk, decline “Super Cover” and anything else that lowers the excess.</b> The basic damage and theft cover is included by Italian law anyway. Your card pays back the excess (the part you'd otherwise owe) if something happens.</li>
+      <li><b>Return before 07:30 on Sat 7 Nov.</b> Avis opens at 07:30 and has a 24-hour key box. That early return is the reason it beats the cheaper companies.</li>
+    </ol>
+    <div class="btns">
+      <a class="btn" href="https://www.avis.com">Book at avis.com ↗</a>
+      <a class="btn ghost" href="https://www.kayak.com/cars/CAG/2026-10-30-08h/2026-11-07-08h?sort=price_a">Compare on Kayak ↗</a>
+      <a class="btn ghost" href="https://www.chasecardbenefits.com">Chase card benefits ↗</a>
+    </div>
+  </div>
+
+  <div class="note info">
+    <b class="h">Three things only you can decide</b>
+    <ul>
+      <li><b>Will Veronica drive?</b> If so, add her as an extra driver: $11.23 a day, about $90 for the trip. If she's not on the contract, she isn't insured at all, by Avis or by Chase.</li>
+      <li><b>Manual or automatic?</b> Manuals are much cheaper in Italy. If you want an automatic, the Nissan Juke class is about $166 before taxes (see the table).</li>
+      <li><b>Your country of residence on Avis.</b> I priced with Avis.com's default, “Residency: US”. Set it to where you actually live, since your licence is EU. If the price changes, the new price is the real one: a rate meant for US residents can be refused at the desk.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= WHY AVIS ================= -->
+<section class="block" id="why">
+  <h2 class="sec">Why Avis and not the cheapest</h2>
+  <p class="lede">Your trip has two awkward times. You land at <b>07:20 on Friday</b> and want to be driving by 08:00. On the last morning you need the car back by <b>07:30 on Saturday</b> for the 09:20 flight. Most desks at CAG open at 08:00.</p>
+  <div class="grid">
+    <div class="card pick">
+      <span class="pill">Recommended</span>
+      <h3>Avis (also Budget and Maggiore)</h3>
+      <ul>
+        <li>The desk opens at <b>07:30</b>. The Avis booking form offers return times from 07:30 to 23:45.</li>
+        <li><b>24-hour key box</b>, so you can drop early if needed (from your V2 checks).</li>
+        <li>Desk in the Palazzina Autonoleggi and return in the multi-storey car park next to the terminal. No shuttle bus.</li>
+        <li>A major brand: fewer surprise fees, clear rules, and its contract works with the Chase claim process.</li>
+      </ul>
+    </div>
+    <div class="card alt">
+      <span class="pill warn">Cheaper, but risky for you</span>
+      <h3>B-Rent, Dryyve, Viaggiare, Felirent, Wheego…</h3>
+      <ul>
+        <li>Kayak's totals for 8 days start at <b>$40–49</b>, about $100–150 less than Avis.</li>
+        <li>Most are <b>off-airport</b>, “shuttle” or “call for pick-up”. You don't want a shuttle on a 07:30 return before a 09:20 flight.</li>
+        <li>When I searched with a 07:00 return, Avis and Budget disappeared from Kayak completely, so opening hours really do filter the list.</li>
+        <li>Budget companies often push heavy cover at the desk, take a large deposit, and some in Italy want an embossed credit card. The Sapphire is a flat metal card.</li>
+      </ul>
+    </div>
+    <div class="card alt">
+      <span class="pill">Fine for Zain, not for you</span>
+      <h3>Locauto, Sicily by Car, Hertz, Europcar, Sixt</h3>
+      <ul>
+        <li>Desks open at <b>08:00</b>. Hertz, Europcar, Goldcar, Sicily by Car and Locauto have no key box, so a 07:30 return needs their OK in writing.</li>
+        <li>Sixt advertises 24-hour returns (keys go to its check-in cabin) but costs more: from $166.</li>
+        <li>They're no cheaper than Avis for your dates anyway (see the table).</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRICES ================= -->
+<section class="block" id="prices">
+  <h2 class="sec">What it costs</h2>
+  <p class="lede">These are live prices from Mon 26 Oct for 30 Oct 08:00 → 7 Nov, in US dollars, as Avis and Kayak showed them. The Avis rows are actual totals from the Avis checkout page, with every tax and fee included. The Kayak rows are the cheapest “from” price for each company. Prices this close to the date move daily.</p>
+
+  <h3>Avis direct, CAG (pick-up 08:00, return 07:30)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Car (“or similar”)</th><th>Gearbox</th><th class="num">Pay now<br>(car only)</th><th class="num">Pay at desk<br>(car only)</th><th class="num">Total with taxes &amp; fees</th></tr></thead>
+    <tbody>
+      <tr><td>Toyota Aygo · Mini</td><td>Manual</td><td class="num">$90</td><td class="num">—</td><td class="num">≈ $140–150</td></tr>
+      <tr><td><b>Fiat Panda · Economy</b>: the budget pick</td><td>Manual</td><td class="num">$93</td><td class="num">$105</td><td class="num"><b>$142.46</b> pay now · ≈ $156 at desk</td></tr>
+      <tr><td>Renault Clio · Economy</td><td>Manual</td><td class="num">$112</td><td class="num">—</td><td class="num">≈ $165</td></tr>
+      <tr class="hl"><td><b>Renault Captur · Compact</b>: recommended</td><td>Manual</td><td class="num">$120</td><td class="num">$138</td><td class="num"><b>$174.82</b> pay now · ≈ $195 at desk</td></tr>
+      <tr><td>VW Taigo · Compact crossover</td><td>Manual</td><td class="num">$172</td><td class="num">—</td><td class="num">≈ $235</td></tr>
+      <tr><td>Nissan Juke · Compact</td><td>Automatic</td><td class="num">$166</td><td class="num">—</td><td class="num">≈ $230</td></tr>
+      <tr><td>VW Polo · Economy</td><td>Automatic</td><td class="num">$202</td><td class="num">—</td><td class="num">≈ $270</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small muted">Taxes and fees on the Panda were $49.46: airport surcharge $19.43, local tax $8.92, registration fee $21.11. On the Captur they were $54.81. Totals marked “≈” are my estimates from the same fees; the two bold ones are exactly what Avis showed. Unlimited kilometres, theft protection and basic collision damage waiver are included. A pay-now booking costs $50 to cancel, or $150 within 24 hours of pick-up, so pay at the desk: it's only about $15–20 more and you can cancel for free.</p>
+
+  <h3>Everyone else at CAG (Kayak, cheapest car per company, 8 days)</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Company</th><th class="num">From</th><th>Notes for your dates</th></tr></thead>
+    <tbody>
+      <tr><td>Dryyve · B-Rent · Viaggiare Rent · Last Minute Rent · CarWiz</td><td class="num">$40–44</td><td>Mostly off-airport or “call for pick-up”; not open for a 07:30 Saturday return</td></tr>
+      <tr><td>Italy Car Rent · Galdierirent · Felirent · Wheego</td><td class="num">$46–48</td><td>Same</td></tr>
+      <tr><td>Rent Smart 24 · OptimoRent · Ecovia · NU Car · Final Rentals · Autovia</td><td class="num">$68–94</td><td>Small local firms</td></tr>
+      <tr><td>Locauto (Enterprise partner)</td><td class="num">$100</td><td>Opens 08:00, no key box</td></tr>
+      <tr><td>Sicily by Car · Vitarent · Alamo</td><td class="num">$109–112</td><td>Open 08:00</td></tr>
+      <tr class="hl"><td><b>Budget</b> (Avis group)</td><td class="num">$118</td><td>Opens before 08:00, key box: a fine alternative to Avis</td></tr>
+      <tr><td>Enterprise · Drivalia · Vettura · CarAlliance</td><td class="num">$120–128</td><td></td></tr>
+      <tr class="hl"><td><b>Avis</b> (through Kayak)</td><td class="num">$135</td><td>Avis direct is cheaper: $93 + tax</td></tr>
+      <tr><td>National · Noleggiare · Sixt · Europcar</td><td class="num">$145–168</td><td>Sixt: 24-hour return to its cabin</td></tr>
+      <tr><td>Hertz · Dollar · Thrifty · Rental4Leisure</td><td class="num">$210–297</td><td>No point</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small muted">Maggiore (also Avis group, open before 08:00) didn't show up on Kayak. Check <a href="https://www.maggiore.it">maggiore.it</a> if you like, but expect prices close to Avis.</p>
+</section>
+
+<!-- ================= WHICH CAR ================= -->
+<section class="block" id="which">
+  <h2 class="sec">Which car</h2>
+  <p class="lede">You have hand luggage only and two people, so any class fits. What matters is the roads: hairpins up to the Golgo plateau and through Baunei's narrow streets, the Genna Silana pass in the dark, <b>5 km of washboard dirt road into Piscinas</b>, 1–1.5 km of dirt track to the Goloritzé trailhead, and long fast stretches on the SS131 and the new SS125.</p>
+  <div class="grid">
+    <div class="card pick">
+      <span class="pill">Recommended</span>
+      <h3>Renault Captur class (Compact Manual)</h3>
+      <p class="price">≈ $195 <small>at desk · $174.82 pay now</small></p>
+      <p>Sits higher off the ground than a Panda, so it's calmer on the Piscinas washboard and the Golgo track. More power for the climbs, quieter on the 2–3 hour transfer days, and it holds 2 large and 2 small bags. Costs about $40 more than the Panda.</p>
+    </div>
+    <div class="card alt">
+      <span class="pill green">Budget pick</span>
+      <h3>Fiat Panda class (Economy Manual)</h3>
+      <p class="price">≈ $156 <small>at desk · $142.46 pay now</small></p>
+      <p>Sardinia's default car: narrow, nimble in village streets, cheap to run, and it handles the dirt roads fine if you go slowly. A bit noisy and slow on the SS131. A good choice if you'd rather save the $40.</p>
+    </div>
+    <div class="card alt">
+      <span class="pill warn">Only if you need it</span>
+      <h3>Automatic (Nissan Juke class)</h3>
+      <p class="price">≈ $230 <small>estimate · $166 + tax</small></p>
+      <p>Worth it only if neither of you wants to drive a manual on steep hairpins. Avis has few automatics, and “or similar” may still mean a manual if you don't book this class.</p>
+    </div>
+  </div>
+  <p class="small muted">Skip the mini class (Aygo): it saves only $3 over the Panda, has 3 doors, and struggles up the Golgo hairpins with two people.</p>
+</section>
+
+<!-- ================= INSURANCE ================= -->
+<section class="block" id="insurance">
+  <h2 class="sec">Insurance with the Chase Sapphire Preferred</h2>
+  <p class="lede">This is where most of the money is saved or lost. Avis Italy charges <b>€32–58 per day for Super Cover</b>, the counter product that takes your excess to zero. That's €256–464 for 8 days, two to three times the price of the car. Your card already covers the same risk.</p>
+
+  <div class="two">
+    <div class="card">
+      <h3>What's in the Avis price by Italian law</h3>
+      <ul>
+        <li><b>Third-party liability</b>: damage to other people, their cars and property. Every Italian rental includes it.</li>
+        <li><b>Collision damage waiver (CDW)</b> and <b>theft protection (TP)</b>, both marked “Included” at checkout. Each comes with an <b>excess</b> (the most you pay if the car is damaged or stolen), which Avis says “can be reduced by purchasing super cover at the counter”. The exact amount is written on your rental agreement. In Italy it's usually somewhere around €1,000–2,000 for a small car, so read it at the desk.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>What the Chase card adds</h3>
+      <ul>
+        <li><b>Primary</b> cover, <b>worldwide</b>, up to <b>$60,000</b>, for rentals of up to 31 days.</li>
+        <li>Covers <b>theft, damage, loss-of-use charges, admin fees and towing</b>.</li>
+        <li>Italy's basic CDW can't be declined, so Chase acts as <b>secondary</b> to it. In practice it pays back whatever Avis charges you on top: the excess.</li>
+        <li>You, plus any driver <b>named on the contract</b>, are covered.</li>
+      </ul>
+    </div>
+  </div>
+
+  <blockquote>“If the Rental Agency, outside of the United States, will not allow You to decline their CDW/LDW coverage, then this benefit is secondary to the Rental Agency’s CDW/LDW coverage.” <span class="muted">Chase Sapphire Preferred Guide to Benefits, Auto Rental Coverage</span></blockquote>
+
+  <div class="note warn">
+    <b class="h">The rules that keep you covered</b>
+    <ol>
+      <li><b>The whole rental goes on the Sapphire Preferred</b>, in the main driver's name. Don't split the payment with another card or pay the balance with a debit card.</li>
+      <li><b>Decline Super Cover</b> (also called SCDW, “Super Copertura” or excess reduction). Buying it cancels the Chase benefit.</li>
+      <li><b>Only named drivers.</b> If Veronica drives without being on the contract, neither Avis nor Chase covers her.</li>
+      <li><b>No off-road driving.</b> Chase excludes “damage due to off-road operation” and anything that breaks the rental contract. The Piscinas road and the Golgo track are public dirt roads, not off-road, but drive them slowly. If the desk tells you unpaved roads are forbidden, ask them to explain.</li>
+      <li><b>Not covered by Chase:</b> injuries, your belongings, wear and tear or mechanical breakdown, and liability to other people (Italy's included insurance handles that).</li>
+    </ol>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <h3>The deposit (card hold)</h3>
+      <p>Avis's checkout says it holds <b>up to $300</b> on your card. Italian desks often block more when you decline Super Cover, sometimes the whole excess. Make sure the Sapphire has <b>€2,000 or so of free credit</b>. The hold is released after the car is back, and that can take up to two weeks.</p>
+    </div>
+    <div class="card">
+      <h3>If something happens</h3>
+      <ol>
+        <li>Photograph everything. Get a police report or the European accident form (<i>constatazione amichevole</i>) if another car is involved, and call Avis.</li>
+        <li>Report it to Chase <b>within 100 days</b> at <a href="https://www.chasecardbenefits.com">chasecardbenefits.com</a>, or call +1 800 350 1362 (collect from abroad: +1 214 503 2951).</li>
+        <li>Send the documents within 365 days: both rental agreements, the damage report, the repair bill, photos, Avis's bill to you, and the card statement.</li>
+      </ol>
+      <p class="small muted">Avis charges the excess to your card first, and Chase pays you back weeks later.</p>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <h3>The other add-ons at checkout</h3>
+      <ul>
+        <li><b>Windscreen Protection</b> $3.21–3.67/day: <b>skip it</b>. Glass damage is damage, and Chase covers that.</li>
+        <li><b>Cover Roadside Issues</b> $6.46/day (≈ $52): covers flat tyres, lost keys and wrong fuel. Optional. It's the one add-on I'd consider, because of the dirt roads, but I'd still skip it.</li>
+        <li><b>Additional Driver</b> $11.23/day (≈ $90): only if Veronica drives.</li>
+        <li><b>Sat nav</b> $15.33/day: <b>no</b>. Use phone offline maps.</li>
+        <li><b>Cross Border</b>: no, you stay on the island.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Optional: a letter of coverage</h3>
+      <p>Some Italian desks ask for proof that your card covers the car before they let you decline their cover. Avis usually doesn't, but it costs nothing: download a <b>letter of coverage</b> from <a href="https://www.chasecardbenefits.com">chasecardbenefits.com</a> (or ask at +1 800 350 1362) and keep the PDF on your phone.</p>
+      <p class="small muted">If you'd rather never deal with a claim, the alternative is Avis Super Cover at the desk (€32–58/day). That's peace of mind at roughly €300–450, and the Chase benefit no longer applies.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DRIVER ================= -->
+<section class="block" id="driver">
+  <h2 class="sec">You, the licence and the card</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Age 34</h3>
+      <p>No young-driver fee (that's for under-25s) and no maximum age to worry about.</p>
+    </div>
+    <div class="card">
+      <h3>EU driving licence</h3>
+      <p>Valid in Italy as it is. You don't need an International Driving Permit. Bring the <b>physical card</b>: a photo won't do.</p>
+    </div>
+    <div class="card">
+      <h3>Chase Sapphire Preferred</h3>
+      <p>A real <b>credit</b> card in the main driver's name, which is what Italian desks want for the hold. No foreign-transaction fees. If the card machine offers to charge you in dollars, <b>always choose EUR</b>.</p>
+    </div>
+    <div class="card">
+      <h3>At the desk, have</h3>
+      <ul>
+        <li>Driving licence (and Veronica's, if she drives)</li>
+        <li>Passport or ID card</li>
+        <li>The Sapphire Preferred card itself</li>
+        <li>The Avis confirmation email</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ZAIN ================= -->
+<section class="block" id="zain">
+  <h2 class="sec">Zain's car</h2>
+  <div class="card zain">
+    <span class="pill zain">Zain books and pays for this himself</span>
+    <p>He needs a short rental at CAG: <b>Fri 30 Oct 08:00 → Sat 31 Oct about 18:00</b> (Option A: he drives back from Gorropu and returns the car at about 17:15). Kayak's cheapest for those dates on 26 Oct:</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Company</th><th class="num">From</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>Centauro · Italy Car Rent · Record go · Viaggiare · B-Rent · Wheego · CarWiz</td><td class="num">$13–19</td><td>Mostly off-airport. OK for a Saturday-evening return, but expect hard selling of their cover at the desk.</td></tr>
+        <tr class="hl"><td><b>Locauto</b></td><td class="num">$34</td><td>In the terminal. The sensible pick for him.</td></tr>
+        <tr><td>Alamo · Autovia · Europcar · Galdierirent · Ecovia</td><td class="num">$38</td><td></td></tr>
+        <tr><td>Noleggiare · Hertz · Dollar · Drivalia · Sicily by Car</td><td class="num">$41–47</td><td></td></tr>
+        <tr><td>Avis</td><td class="num">$284</td><td>Strangely expensive for 1–2 days: avoid.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">A Saturday-evening return falls within normal desk hours (most are open 08:00–23:00), so any company works. <b>If he picks Option B</b> instead (leaving Cala Gonone at 03:45 on Sunday and dropping the car at about 07:00), he needs Avis, Budget or Sixt for the early return. Remind him: on Friday, Locauto and the others open at 08:00, so you'll both be driving away around 08:00–08:15.</p>
+  </div>
+</section>
+
+<!-- ================= BOOKING STEPS ================= -->
+<section class="block" id="steps">
+  <h2 class="sec">Step by step</h2>
+  <ol class="steps">
+    <li><b>Today, Mon 26 Oct: book.</b> On avis.com enter Cagliari Elmas Airport (CAG), Fri 30 Oct 08:00 → Sat 7 Nov 07:30, age 25+, and your real residency. Choose Renault Captur (or Fiat Panda) on <b>Best for Flexibility</b>. Don't add Windscreen Protection or Sat nav. Add Veronica only if she'll drive. Enter your flight number if asked.</li>
+    <li><b>Before Friday: download the Chase letter of coverage</b> and the Avis confirmation to your phone. Check how much free credit the Sapphire has.</li>
+    <li><b>Fri 30 Oct, 07:20: land and walk to the Avis desk</b> in the Palazzina Autonoleggi next to the terminal. Hand luggage only, so you should be there by about 07:40.</li>
+    <li><b>At the desk, say “No Super Cover, thank you, my credit card covers it.”</b> Before you sign, check the contract: no lines for SCDW / Super Cover / PAI that you didn't ask for, the fuel policy is <b>full to full</b>, and note the excess amount. Pay with the Sapphire.</li>
+    <li><b>At the car, film a slow walk-around</b>: every panel, the wheels and tyres, the windscreen, the interior, the dashboard with mileage and fuel. Make sure every scratch is on the damage sheet before you drive off. Check that there's a spare wheel or repair kit, for Piscinas.</li>
+    <li><b>During the trip, drive under the Chase rules</b>: only named drivers, dirt roads slowly, nothing off-road. Fill up at the Api-IP in Baunei on day 1.</li>
+    <li><b>Sat 7 Nov: fill up at the Eni at the Elmas exit, then return at 07:30</b> to the Avis bays in the multi-storey car park. Film the car again, keep the fuel receipt, and ask for the closed contract by email. If the desk isn't staffed yet, use the Avis key box and take a photo of the car and the keys going in.</li>
+    <li><b>Afterwards</b>, watch your card for 4–6 weeks. Speed-camera or ZTL fines arrive months later, with an Avis admin fee on top.</li>
+  </ol>
+</section>
+
+<!-- ================= ON THE ROAD ================= -->
+<section class="block" id="road">
+  <h2 class="sec">Driving in Sardinia</h2>
+  <div class="grid">
+    <div class="card"><h3>No tolls</h3><p>Sardinia has no toll motorways. The SS131, SS125 and SS554 are all free.</p></div>
+    <div class="card"><h3>ZTL in Cagliari</h3><p>The old centre (Castello, Marina, Stampace, Villanova) has camera-enforced restricted-traffic zones (ZTL). Park outside them and walk, especially on Thu 5 Nov for the Sella del Diavolo (Marina Piccola is fine).</p></div>
+    <div class="card"><h3>Speed cameras</h3><p>“Autovelox” cameras are common on the SS131, the SS125 and through villages. Usual limits: 50 in towns, 90 on ordinary roads, 110 on dual carriageways, but check the signs.</p></div>
+    <div class="card"><h3>Headlights</h3><p>Dipped headlights are compulsory outside towns, day and night.</p></div>
+    <div class="card"><h3>Fuel</h3><p>“Fai da te” (self-service) is cheaper than “servito”. Stations are rare in the mountains: <b>Baunei is the last one before Dorgali</b>, and there's none on the SP71 Costa del Sud (fill up before Teulada).</p></div>
+    <div class="card"><h3>Parking</h3><p>Blue lines: pay (machine or app). White lines: free. Yellow lines: residents or disabled only. Sinis beach parking is still paid on Mon 2 Nov.</p></div>
+    <div class="card"><h3>Dirt roads</h3><p>Into Piscinas via Ingurtosu (5 km of washboard) and to Su Porteddu (about 1.5 km): 20–30 km/h, keep off the deep ruts, and expect stone chips.</p></div>
+    <div class="card"><h3>Animals and the dark</h3><p>Goats, cattle, pigs and boar on the SS125 and the Golgo plateau, especially after sunset (about 17:20). Slow down on blind bends.</p></div>
+  </div>
+</section>
+
+<!-- ================= BUDGET ================= -->
+<section class="block" id="budget">
+  <h2 class="sec">Total budget</h2>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Item</th><th class="num">Captur</th><th class="num">Panda</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Avis rental, 8 days, taxes and fees in (pay at desk)</td><td class="num">≈ $195</td><td class="num">≈ $156</td><td>Pay now: $174.82 / $142.46, but cancelling costs $50–150</td></tr>
+      <tr><td>Fuel for ≈1,080 km</td><td class="num">≈ €120–135</td><td class="num">≈ €105–120</td><td>Estimate: 6–6.5 / 5.5–6 L per 100 km at about €1.80–1.90/L</td></tr>
+      <tr><td>Super Cover</td><td class="num">€0</td><td class="num">€0</td><td>Declined: the Chase card covers it (it would be €256–464)</td></tr>
+      <tr><td>Parking (Sinis, Cagliari, trailheads)</td><td class="num">≈ €10–20</td><td class="num">≈ €10–20</td><td>Most trip parking is free in November</td></tr>
+      <tr class="total"><td>Total</td><td class="num">≈ $195 + €140</td><td class="num">≈ $156 + €125</td><td></td></tr>
+      <tr><td>If Veronica also drives</td><td class="num">+ ≈ $90</td><td class="num">+ ≈ $90</td><td>$11.23 a day</td></tr>
+      <tr><td>Card hold (temporary)</td><td class="num" colspan="2">$300 up to the excess</td><td>Released after the return</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<footer class="foot">
+  <p><b>How this was checked (Mon 26 Oct 2026):</b> live searches on avis.com (CAG, 30 Oct 08:00 → 7 Nov 07:30, Residency US, driver 25+) through to the checkout summary (nothing was booked), and on Kayak for 30 Oct 08:00 → 7 Nov 07:00/08:00 and 30 Oct 08:00 → 31 Oct 18:00. The Chase terms come from the current Sapphire Preferred Guide to Benefits (ARCDW, version dated 11 Mar 2024). Fuel and parking are estimates. Excess amounts weren't published online: read yours on the contract.</p>
+  <ul>
+    <li><a href="https://static.chasecdn.com/content/services/structured-document/document.en.pdf/card/benefits-center/product-benefits-guide-pdf/BGC11387_v2.pdf">Chase Sapphire Preferred Guide to Benefits (PDF)</a></li>
+    <li><a href="https://www.avis.com/en/locations/eur/it/sardinia/cagliari-sardinia/cgl">Avis Italy: Super Cover price range and after-hours return rules</a></li>
+    <li><a href="https://www.kayak.com/cars/CAG/2026-10-30-08h/2026-11-07-08h?sort=price_a">Kayak: CAG, 30 Oct → 7 Nov</a></li>
+    <li><a href="https://www.nerdwallet.com/travel/learn/chase-sapphire-preferred-rental-car-insurance-guide">NerdWallet: Sapphire Preferred rental insurance guide</a></li>
+    <li>Desk hours and key boxes at CAG: your own V2 checks (<a href="days/day9.html">Day 9 guide</a>), plus the Avis booking form (returns from 07:30)</li>
+  </ul>
+</footer>
+
+</div></body></html>

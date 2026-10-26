@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sardegna Stays</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Same tokens and type as sardegna-trip-v2.html */
+:root{
+  --paper:#F1F4F3; --card:#FFFFFF; --ink:#11292F; --muted:#56696E; --line:#D3DDDC;
+  --sea:#0A7B87; --sea-soft:#DCEDEE; --maquis:#4F6B3B; --maquis-soft:#E5EDDC;
+  --sign:#1D4FA3; --route:#C9452E; --warn-soft:#FBEDE3; --warn:#9A4A1E;
+  --zain:#8B4A9C; --zain-soft:#F1E6F4; --abnb:#D9384F; --bk:#1D4FA3;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --ui:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0D1719; --card:#142327; --ink:#E2ECEC; --muted:#93A7AA; --line:#27393D;
+  --sea:#4CC0CB; --sea-soft:#12343A; --maquis:#A0C283; --maquis-soft:#1C2A18;
+  --sign:#3466C4; --route:#F2694C; --warn-soft:#2E2016; --warn:#F0A877;
+  --zain:#CC9BDB; --zain-soft:#2A1D30; --abnb:#FF6B80; --bk:#7FA6F0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0D1719; --card:#142327; --ink:#E2ECEC; --muted:#93A7AA; --line:#27393D;
+  --sea:#4CC0CB; --sea-soft:#12343A; --maquis:#A0C283; --maquis-soft:#1C2A18;
+  --sign:#3466C4; --route:#F2694C; --warn-soft:#2E2016; --warn:#F0A877;
+  --zain:#CC9BDB; --zain-soft:#2A1D30; --abnb:#FF6B80; --bk:#7FA6F0; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--sea);text-decoration-thickness:1px;text-underline-offset:2px}
+a:hover{text-decoration-thickness:2px}
+a:focus-visible,.btn:focus-visible{outline:2px solid var(--route);outline-offset:2px;border-radius:3px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+h1,h2,h3,h4{text-wrap:balance;margin:0}
+p{margin:0}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.eyebrow{font-family:var(--ui);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.eyebrow a{color:inherit;text-decoration:none}
+.eyebrow a:hover{color:var(--sea)}
+
+/* header */
+.top{display:grid;gap:14px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(52px,9vw,104px);line-height:.9;letter-spacing:-.01em;text-transform:uppercase}
+h1 span{color:var(--sea)}
+.sub{max-width:68ch;font-size:18px}
+.jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.jump a{font-family:var(--ui);font-weight:600;font-size:15px;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:5px;padding:7px 12px;display:inline-flex;gap:7px;align-items:baseline}
+.jump a b{font-family:var(--display);color:var(--sign);font-size:18px}
+.jump a span{color:var(--muted);font-weight:500;font-size:13px}
+.jump a:hover{border-color:var(--sea)}
+
+.block{padding-top:40px;display:grid;gap:12px}
+.sec{font-family:var(--display);font-weight:600;font-size:clamp(30px,4.4vw,44px);text-transform:uppercase;letter-spacing:.01em;line-height:1}
+
+/* combos table */
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:6px;background:var(--card)}
+.combos{border-collapse:collapse;width:100%;min-width:720px;font-family:var(--ui);font-size:15px}
+.combos th,.combos td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.combos thead th{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.combos tbody th{font-family:var(--display);font-size:20px;font-weight:600;text-transform:uppercase;white-space:nowrap}
+.combos tbody tr:first-child th{color:var(--sea)}
+.combos tbody tr:last-child th,.combos tbody tr:last-child td{border-bottom:0}
+.combos td a{display:block;color:var(--ink);text-decoration:none;font-weight:500;line-height:1.25}
+.combos td a:hover{color:var(--sea)}
+.combos td span{color:var(--muted);font-size:13.5px;font-variant-numeric:tabular-nums}
+.combos td.tot{font-family:var(--display);font-size:24px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.caveats{font-size:15.5px;color:var(--muted);max-width:90ch}
+.caveats b{color:var(--ink)}
+
+/* base sections */
+.base{padding-top:56px;display:grid;gap:18px;scroll-margin-top:8px}
+.base-head{display:flex;gap:16px;align-items:center;border-top:3px solid var(--ink);padding-top:16px}
+.num{flex:none;width:52px;height:52px;border-radius:6px;background:var(--sign);color:#fff;font-family:var(--display);font-weight:700;font-size:32px;display:grid;place-items:center}
+.zain .num{background:var(--zain)}
+.zain .base-head{border-top-color:var(--zain)}
+.dates{font-family:var(--ui);font-size:16px;font-weight:500;margin-top:4px}
+.brief{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) minmax(0,1.2fr);gap:18px 28px;align-items:start}
+.brief h4{font-family:var(--ui);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.when{margin:0;display:grid;gap:10px;font-family:var(--ui);font-size:15px}
+.when dt{font-size:12.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.when dd{margin:0}
+.needs{margin:0;padding-left:18px;font-size:15.5px;display:grid;gap:5px}
+.pick{background:var(--sea-soft);border-left:3px solid var(--sea);padding:12px 14px;border-radius:0 6px 6px 0;font-size:15.5px}
+.pick h4{color:var(--sea)}
+
+/* option cards */
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:18px}
+.opt{background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.gal{display:grid;gap:3px;background:var(--line)}
+.gal.g3{grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;aspect-ratio:16/10}
+.gal.g3 .ph:first-child{grid-row:1/3}
+.gal.g2{grid-template-columns:1.6fr 1fr;aspect-ratio:16/10}
+.gal.g1{aspect-ratio:16/10}
+.ph{display:block;overflow:hidden;background:var(--sea-soft);min-height:0}
+.ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.ph:hover img{transform:scale(1.03)}
+.opt-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
+.opt-head h3{font-family:var(--ui);font-size:20px;font-weight:600;line-height:1.2;margin-top:6px}
+.src{display:inline-block;font-family:var(--ui);font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;color:#fff}
+.src.abnb{background:var(--abnb)}
+.src.bk{background:var(--bk)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .src{color:#0D1719}}
+:root[data-theme="dark"] .src{color:#0D1719}
+.tag{display:inline-block;margin-left:6px;font-family:var(--ui);font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:1px 7px;border-radius:3px;color:var(--maquis);box-shadow:inset 0 0 0 1.5px var(--maquis)}
+.rate{font-family:var(--ui);font-size:14px;color:var(--muted);margin-top:2px}
+.rate b{color:var(--ink);font-size:15px}
+.price{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-family:var(--ui)}
+.price b{font-family:var(--display);font-size:34px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.price span{font-size:13.5px;color:var(--muted)}
+.chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:5px}
+.chips li{font-family:var(--ui);font-size:13px;line-height:1.2;padding:4px 8px;border-radius:4px;background:var(--paper);border:1px solid var(--line)}
+.why{font-size:15.5px}
+.watch{font-size:14.5px;background:var(--warn-soft);padding:8px 10px;border-radius:5px}
+.watch span{font-family:var(--ui);font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--warn);margin-right:4px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:4px}
+.btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--ui);font-weight:600;font-size:14.5px;padding:8px 13px;border-radius:5px;background:var(--sea);color:var(--paper);text-decoration:none;line-height:1.2}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--sea);box-shadow:inset 0 0 0 1.5px var(--sea)}
+
+.note{border:1px dashed var(--line);border-radius:8px;padding:14px 16px;font-size:15.5px;background:var(--card)}
+.note h4{font-family:var(--ui);font-size:15px;font-weight:600;margin-bottom:4px}
+
+/* Zain */
+.lead{max-width:70ch;font-size:16px}
+.zopts{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:16px}
+.zopt{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;background:var(--zain-soft);border-radius:8px;padding:12px}
+.zopt .ph{border-radius:5px;aspect-ratio:1}
+.zopt h3{font-family:var(--ui);font-size:18px;font-weight:600;margin-top:4px}
+.zopt .price b{font-size:28px}
+.zopt .chips{margin:6px 0}
+.zopt .chips li{background:var(--card)}
+
+.foot{margin-top:56px;padding-top:16px;border-top:1px solid var(--line)}
+
+@media (max-width:900px){.brief{grid-template-columns:1fr 1fr}.pick{grid-column:1/-1}}
+@media (max-width:600px){
+  body{font-size:16px}
+  .brief{grid-template-columns:1fr}
+  .zopt{grid-template-columns:96px minmax(0,1fr)}
+  .num{width:44px;height:44px;font-size:26px}
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <p class="eyebrow"><a href="sardegna-trip-v2.html">← Sardegna Road Trip V2</a></p>
+  <h1>Where we <span>sleep</span></h1>
+  <p class="sub">Four bases, 8 nights, 30 Oct – 7 Nov 2026. Every option below was available for your exact dates when I searched Airbnb and Booking.com on 26 Oct. Cala Gonone was searched for 3 adults so Zain is covered on Friday night, and the rest for 2. The prices are the totals each site quoted.</p>
+  <nav class="jump"><a href="#gonone"><b>1</b> Cala Gonone <span>3n</span></a><a href="#cabras"><b>2</b> Cabras <span>1n</span></a><a href="#nebida"><b>3</b> Nebida / Masua <span>2n</span></a><a href="#villasimius"><b>4</b> Villasimius <span>2n</span></a><a href="#zain"><b>Z</b> Zain <span>opt.</span></a></nav>
+</header>
+
+<section class="block">
+  <h2 class="sec">Three ways to book it</h2>
+  <p class="muted small">Totals for the four bases combined. Click a name to jump to it.</p>
+  <div class="tablewrap"><table class="combos">
+<thead><tr><th></th><th>Cala Gonone · 3n</th><th>Cabras · 1n</th><th>Nebida · 2n</th><th>Villasimius · 2n</th><th>8 nights</th></tr></thead>
+<tbody><tr><th>Recommended</th><td><a href="#gonone">Appartamento a 50 mt dal mare</a><span>€313.50</span></td><td><a href="#cabras">Torremana</a><span>€94</span></td><td><a href="#nebida">Blue Paola Nebida</a><span>€194</span></td><td><a href="#villasimius">Hotel Il Girasole</a><span>€136</span></td><td class="tot">€737.50</td></tr><tr><th>Cheapest</th><td><a href="#gonone">Appartamento a 50 mt dal mare</a><span>€313.50</span></td><td><a href="#cabras">The House of the Moon</a><span>€67</span></td><td><a href="#nebida">Margherita Guesthouse Nebida</a><span>€130</span></td><td><a href="#villasimius">Hotel Sa Cralla</a><span>€132</span></td><td class="tot">€642.50</td></tr><tr><th>Comfort</th><td><a href="#gonone">Penthouse with sea view</a><span>€615</span></td><td><a href="#cabras">Torremana</a><span>€94</span></td><td><a href="#nebida">Casa Belvedere</a><span>€238</span></td><td><a href="#villasimius">[Panoramic View] Garden in the centre</a><span>€216</span></td><td class="tot">€1,163</td></tr></tbody></table></div>
+  <div class="caveats">
+    <p><b>Before you book.</b> Prices are live and will move. Booking.com totals usually exclude the local tourist tax (a euro or two per person per night, paid on arrival, and often waived out of season). Airbnb totals include Airbnb's fees but sometimes not that tax. I didn't check cancellation terms, so look at them on the booking page. November is the very end of the season: message each host with your arrival time when you book, since every night you arrive after dark.</p>
+  </div>
+</section>
+
+<section class="base" id="gonone">
+  <header class="base-head">
+    <div class="num">1</div>
+    <div>
+      <p class="eyebrow">Gulf of Orosei, east coast · 3 nights · 3 adults on night 1 (Zain), then 2</p>
+      <h2 class="sec">Cala Gonone</h2>
+      <p class="dates">Fri 30 Oct → Mon 2 Nov</p>
+    </div>
+  </header>
+  <div class="brief">
+    <dl class="when"><div><dt>Arrive</dt><dd>≈ 18:50 on Fri, after dark over the Genna Silana pass</dd></div><div><dt>Leave</dt><dd>08:45 on Mon</dd></div><div><dt>Range</dt><dd>€313.50 – €615 total</dd></div></dl>
+    <div><h4>What matters here</h4><ul class="needs"><li>Two bedrooms, or a bedroom plus a sofa bed, so Zain has his own bed on Friday. Searched for 3 adults for all 3 nights, so the price already covers him.</li><li>You arrive at about 18:50, so the host needs to be OK with that, or offer self check-in.</li><li>Parking for <b>two cars</b> on Friday night (Zain has his own car).</li><li>A kitchen helps. Most of Cala Gonone is shut in November, and Sun 1 Nov is a public holiday.</li></ul></div>
+    <div class="pick"><h4>My pick</h4><p><b>Appartamento a 50 mt dal mare</b> or <b>Apartment Altomare</b>. They're on the same street, 2-bed, rated 9.2–9.3 and €105–110 a night all in, two minutes' walk from the seafront. For more comfort, go for the <b>Penthouse</b>, the only one with heating, two bathrooms and a sea-view veranda.</p></div>
+  </div>
+  <div class="opts">
+<article class="opt">
+  <div class="gal g2"><a class="ph" href="https://www.booking.com/hotel/it/appartamento-a-50-mt-dal-mare-cala-gonone.html?aid=8132308&amp;checkin=2026-10-30&amp;checkout=2026-11-02&amp;no_rooms=1&amp;group_adults=3&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/544143277.jpg?k=5230ab47213a24b75a7375fae7029e230460a21308933a3545c4d88709bf3c45&amp;o=" alt="Appartamento a 50 mt dal mare, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.booking.com/hotel/it/appartamento-a-50-mt-dal-mare-cala-gonone.html?aid=8132308&amp;checkin=2026-10-30&amp;checkout=2026-11-02&amp;no_rooms=1&amp;group_adults=3&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/484684430.jpg?k=657954cab9750c4bdc8e53398effc1853d22fa7ebb89b04362e8ecd4005385f0&amp;o=" alt="Appartamento a 50 mt dal mare, photo 2" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src bk">Booking.com</span><span class="tag">Best value</span></div>
+      <h3>Appartamento a 50 mt dal mare</h3>
+      <div class="rate"><b>9.3</b>/10 · 125 reviews</div>
+    </div>
+    <div class="price"><b>€313.50</b><span>total, 3 nights · ≈ €104/night</span></div>
+    <ul class="chips"><li>2 bedrooms · sleeps 4</li><li>Full kitchen</li><li>A/C</li><li>Free parking</li><li>Check-in from 15:00 · out 10:00</li></ul>
+    <p class="why">The cheapest well-rated 2-bed place in town, on Via delle Stelle Marine about 50 m from the sea. You can walk to the seafront, the Despar and the port for the Bue Marino boat on Sunday.</p>
+    <p class="watch"><span>Check</span> The parking is free street parking, not a private space. That should be fine in November, but tell them you have two cars. Send your arrival time (≈ 19:00) when you book.</p>
+    <div class="btns"><a class="btn" href="https://www.booking.com/hotel/it/appartamento-a-50-mt-dal-mare-cala-gonone.html?aid=8132308&amp;checkin=2026-10-30&amp;checkout=2026-11-02&amp;no_rooms=1&amp;group_adults=3&amp;selected_currency=EUR" target="_blank" rel="noopener">Book on Booking.com ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=40.281465,9.634302" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g2"><a class="ph" href="https://www.booking.com/hotel/it/apartment-altomare.html?aid=8132308&amp;checkin=2026-10-30&amp;checkout=2026-11-02&amp;no_rooms=1&amp;group_adults=3&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/121338730.jpg?k=726a57ae56d921ccaa0818474adbb09c73ce2f0e544cf0eede88daf37c172246&amp;o=" alt="Apartment Altomare, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.booking.com/hotel/it/apartment-altomare.html?aid=8132308&amp;checkin=2026-10-30&amp;checkout=2026-11-02&amp;no_rooms=1&amp;group_adults=3&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/181327291.jpg?k=4c19ad4118971b2babaebf5d5625eece9624cd8d28c6a6064b07358953595735&amp;o=" alt="Apartment Altomare, photo 2" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src bk">Booking.com</span></div>
+      <h3>Apartment Altomare</h3>
+      <div class="rate"><b>9.2</b>/10 · 133 reviews</div>
+    </div>
+    <div class="price"><b>€328.50</b><span>total, 3 nights · ≈ €110/night</span></div>
+    <ul class="chips"><li>2 bedrooms · sleeps 4</li><li>Full kitchen</li><li>A/C · heating</li><li>Terrace</li><li>Free street parking</li><li>Check-in from 14:00 · out 10:00</li></ul>
+    <p class="why">The twin of the one above, two doors down on Via delle Conchiglie, with the most reviews of anything here. Booking lists heating, which the cheaper one doesn't.</p>
+    <p class="watch"><span>Check</span> Street parking only. Tell them you'll arrive at about 19:00.</p>
+    <div class="btns"><a class="btn" href="https://www.booking.com/hotel/it/apartment-altomare.html?aid=8132308&amp;checkin=2026-10-30&amp;checkout=2026-11-02&amp;no_rooms=1&amp;group_adults=3&amp;selected_currency=EUR" target="_blank" rel="noopener">Book on Booking.com ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=40.281633,9.634874" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g3"><a class="ph" href="https://www.airbnb.com/rooms/1460990516113533021?check_in=2026-10-30&amp;check_out=2026-11-02&amp;adults=3" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/miso/Hosting-1150716569148271476/original/764b9d7b-7ec1-41a8-92b7-b0343bd4bd00.jpeg?im_w=720" alt="Ground floor in a small villa, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/1460990516113533021?check_in=2026-10-30&amp;check_out=2026-11-02&amp;adults=3" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/miso/Hosting-1150716569148271476/original/d0c55432-a9c0-41e3-a2ed-312418bbd2a5.jpeg?im_w=720" alt="Ground floor in a small villa, photo 2" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/1460990516113533021?check_in=2026-10-30&amp;check_out=2026-11-02&amp;adults=3" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/miso/Hosting-1150716569148271476/original/674fbef3-c44e-4eef-b6cd-f9b85a598723.jpeg?im_w=720" alt="Ground floor in a small villa, photo 3" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src abnb">Airbnb</span></div>
+      <h3>Ground floor in a small villa</h3>
+      <div class="rate"><b>4.82</b>/5 · 11 reviews</div>
+    </div>
+    <div class="price"><b>€384</b><span>total, 3 nights · ≈ €128/night</span></div>
+    <ul class="chips"><li>2 bedrooms · 2 double beds</li><li>2 bathrooms</li><li>Free parking on the property</li><li>A/C</li><li>Cooking basics, oven</li></ul>
+    <p class="why">The only budget option with <b>private parking on site and two bathrooms</b>, so Zain gets his own room and bathroom. It's central, a few streets up from the port.</p>
+    <p class="watch"><span>Check</span> The listing has no Wi-Fi and no heating, and only 11 reviews. Fine for sleeping after long hike days, but check with the host.</p>
+    <div class="btns"><a class="btn" href="https://www.airbnb.com/rooms/1460990516113533021?check_in=2026-10-30&amp;check_out=2026-11-02&amp;adults=3" target="_blank" rel="noopener">Book on Airbnb ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=40.2852,9.6372" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g3"><a class="ph" href="https://www.airbnb.com/rooms/820261538213611722?check_in=2026-10-30&amp;check_out=2026-11-02&amp;adults=3" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/hosting/Hosting-820261538213611722/original/fe017667-4527-42b3-953b-b7a8c8e47338.jpeg?im_w=720" alt="Penthouse with sea view, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/820261538213611722?check_in=2026-10-30&amp;check_out=2026-11-02&amp;adults=3" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/miso/Hosting-820261538213611722/original/f337b873-d66c-40ed-9863-ece97f055015.jpeg?im_w=720" alt="Penthouse with sea view, photo 2" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/820261538213611722?check_in=2026-10-30&amp;check_out=2026-11-02&amp;adults=3" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/miso/Hosting-820261538213611722/original/083b63dc-2cc5-4fe9-88f3-27359614e884.jpeg?im_w=720" alt="Penthouse with sea view, photo 3" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src abnb">Airbnb</span><span class="tag">Comfort pick</span></div>
+      <h3>Penthouse with sea view</h3>
+      <div class="rate"><b>4.8</b>/5 · 70 reviews</div>
+    </div>
+    <div class="price"><b>€615</b><span>total, 3 nights · ≈ €205/night</span></div>
+    <ul class="chips"><li>2 bedrooms + sofa bed</li><li>2 bathrooms</li><li>Heating + A/C</li><li>Wi-Fi</li><li>Washer · dishwasher</li><li>Covered sea-view veranda</li><li>Free street parking</li></ul>
+    <p class="why">The nicest of the lot. A top-floor flat in the centre with a covered veranda over the bay, which is good for breakfast and for drying hiking kit, plus a washing machine after Gorropu.</p>
+    <p class="watch"><span>Check</span> The host meets you in person (no self check-in), so agree on 19:00 beforehand. The washing machine is limited to twice a day. It costs about twice as much as the Booking.com options.</p>
+    <div class="btns"><a class="btn" href="https://www.airbnb.com/rooms/820261538213611722?check_in=2026-10-30&amp;check_out=2026-11-02&amp;adults=3" target="_blank" rel="noopener">Book on Airbnb ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=40.2854,9.6381" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g3"><a class="ph" href="https://www.airbnb.com/rooms/50251225?check_in=2026-10-30&amp;check_out=2026-11-02&amp;adults=3" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/3b526f39-d500-4d1e-8f93-80e3118fa0b9.jpg?im_w=720" alt="Casa Diana, modern apartment with parking, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/50251225?check_in=2026-10-30&amp;check_out=2026-11-02&amp;adults=3" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/0f910848-cb74-4afc-935c-33338efbf87f.jpg?im_w=720" alt="Casa Diana, modern apartment with parking, photo 2" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/50251225?check_in=2026-10-30&amp;check_out=2026-11-02&amp;adults=3" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/015e0312-fdb9-4b35-8e43-0757fb74087a.jpg?im_w=720" alt="Casa Diana, modern apartment with parking, photo 3" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src abnb">Airbnb</span><span class="tag">Superhost</span></div>
+      <h3>Casa Diana, modern apartment with parking</h3>
+      <div class="rate"><b>4.86</b>/5 · 84 reviews</div>
+    </div>
+    <div class="price"><b>€578</b><span>total, 3 nights · ≈ €193/night</span></div>
+    <ul class="chips"><li>2 bedrooms</li><li>Free parking on the property</li><li>Sea view</li><li>Wi-Fi · A/C</li><li>Dishwasher</li><li>Courtyard + veranda</li></ul>
+    <p class="why">New and modern, with private parking and a Superhost. It's in a quiet residential street on the upper side of town, about 2 minutes' drive from the beach. It's also the first place you reach coming down from Dorgali.</p>
+    <p class="watch"><span>Check</span> The listing has no heating. It's on the hill, so you'll drive down to the seafront rather than walk.</p>
+    <div class="btns"><a class="btn" href="https://www.airbnb.com/rooms/50251225?check_in=2026-10-30&amp;check_out=2026-11-02&amp;adults=3" target="_blank" rel="noopener">Book on Airbnb ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=40.28352,9.6297" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+  </div>
+  <div class="note"><h4>Plan B: separate rooms</h4><p>If you'd rather not share a flat with Zain, book a double for the two of you for 3 nights and a single room for him on Friday. <a href="https://www.booking.com/hotel/it/b-amp-b-acquadolce.html?aid=8132308&checkin=2026-10-30&checkout=2026-11-02&no_rooms=1&group_adults=2&selected_currency=EUR">B&amp;B AcquaDolce</a> (9.3, €270 for 3 nights) plus <a href="https://www.booking.com/hotel/it/affittacamere-marizzola.html?aid=8132308&checkin=2026-10-30&checkout=2026-10-31&no_rooms=1&group_adults=1&selected_currency=EUR">Affittacamere Marizzola</a> for Zain (9.2, €77.50) or <a href="https://www.booking.com/hotel/it/la-playa-cala-gonone.html?aid=8132308&checkin=2026-10-30&checkout=2026-10-31&no_rooms=1&group_adults=1&selected_currency=EUR">Hotel La Playa</a> (8.8, €89.50 with breakfast) comes to about €348–360. That costs more than the shared apartments above and leaves you without a kitchen.</p></div>
+</section><section class="base" id="cabras">
+  <header class="base-head">
+    <div class="num">2</div>
+    <div>
+      <p class="eyebrow">Sinis peninsula, west coast · 1 night · 2 adults</p>
+      <h2 class="sec">Cabras</h2>
+      <p class="dates">Mon 2 Nov → Tue 3 Nov</p>
+    </div>
+  </header>
+  <div class="brief">
+    <dl class="when"><div><dt>Arrive</dt><dd>≈ 18:15–18:40, after the Capo San Marco sunset</dd></div><div><dt>Leave</dt><dd>08:15 on Tue</dd></div><div><dt>Range</dt><dd>€67 – €94 total</dd></div></dl>
+    <div><h4>What matters here</h4><ul class="needs"><li>One night, so it's just a bed, a shower and breakfast before the drive to Piscinas at 08:15.</li><li>Within walking distance of dinner: Zia Belledda (20:00) and Leopardi are both in the centre.</li><li>Easy parking, because the car will be full of luggage.</li></ul></div>
+    <div class="pick"><h4>My pick</h4><p><b>Torremana</b>. It's rated 9.9 from 471 reviews and breakfast is included, all for €94. If it's full, take <b>Bbsupottai</b> or <b>Il tuo Relax</b>, which are next door to each other on Via Garibaldi and just as good. Ask all of them for breakfast at about 07:30.</p></div>
+  </div>
+  <div class="opts">
+<article class="opt">
+  <div class="gal g2"><a class="ph" href="https://www.booking.com/hotel/it/torremana-cabras.html?aid=8132308&amp;checkin=2026-11-02&amp;checkout=2026-11-03&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/416453307.jpg?k=f609054e82efd3c4cd91b64db15d5baf2b4805059be7f162358de57a8a1b892e&amp;o=" alt="Torremana, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.booking.com/hotel/it/torremana-cabras.html?aid=8132308&amp;checkin=2026-11-02&amp;checkout=2026-11-03&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/416453642.jpg?k=206dbd49a0d2761f29440f32ea7c3ba5d26c70b9c4afe5f6b454a58e5e2ccadf&amp;o=" alt="Torremana, photo 2" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src bk">Booking.com</span><span class="tag">Top pick</span></div>
+      <h3>Torremana</h3>
+      <div class="rate"><b>9.9</b>/10 · 471 reviews</div>
+    </div>
+    <div class="price"><b>€94</b><span>total, 1 night · ≈ €94/night</span></div>
+    <ul class="chips"><li>Double room, king bed</li><li>Breakfast included</li><li>Free street parking</li><li>Check-in from 16:00 · out 10:30</li></ul>
+    <p class="why">Guests rate it almost perfect. It's a quiet guest house a few minutes' walk from the centre and the restaurants.</p>
+    <p class="watch"><span>Check</span> Tell them you'll arrive at about 18:30, and ask if breakfast can be early.</p>
+    <div class="btns"><a class="btn" href="https://www.booking.com/hotel/it/torremana-cabras.html?aid=8132308&amp;checkin=2026-11-02&amp;checkout=2026-11-03&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener">Book on Booking.com ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.927583,8.53127" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g2"><a class="ph" href="https://www.booking.com/hotel/it/bbsupottai.html?aid=8132308&amp;checkin=2026-11-02&amp;checkout=2026-11-03&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/32075083.jpg?k=b82062867a1388104f78c6c8ac982046ac709284fde4cb064acd51627a31d46a&amp;o=" alt="Bbsupottai, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.booking.com/hotel/it/bbsupottai.html?aid=8132308&amp;checkin=2026-11-02&amp;checkout=2026-11-03&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/496180334.jpg?k=98f92bf177fcd4aaaff3b79f19359256016e291a97b366007e513dcdedbee739&amp;o=" alt="Bbsupottai, photo 2" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src bk">Booking.com</span></div>
+      <h3>Bbsupottai</h3>
+      <div class="rate"><b>9.8</b>/10 · 178 reviews</div>
+    </div>
+    <div class="price"><b>€84</b><span>total, 1 night · ≈ €84/night</span></div>
+    <ul class="chips"><li>Double/twin, super-king bed</li><li>Breakfast included</li><li>Free parking</li><li>Check-in from 14:30 · out 11:00</li></ul>
+    <p class="why">Right in the centre on Via Garibaldi, where dinner is a short walk away. Reviewers mention the big Italian breakfast.</p>
+    <p class="watch"><span>Check</span> Let them know your arrival time.</p>
+    <div class="btns"><a class="btn" href="https://www.booking.com/hotel/it/bbsupottai.html?aid=8132308&amp;checkin=2026-11-02&amp;checkout=2026-11-03&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener">Book on Booking.com ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.930885,8.532297" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g2"><a class="ph" href="https://www.booking.com/hotel/it/il-tuo-relax.html?aid=8132308&amp;checkin=2026-11-02&amp;checkout=2026-11-03&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/603795059.jpg?k=864c19e7f29bf3239bd84684c98768025494bd2e5511df767905a089a2989c64&amp;o=" alt="Il tuo Relax, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.booking.com/hotel/it/il-tuo-relax.html?aid=8132308&amp;checkin=2026-11-02&amp;checkout=2026-11-03&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/603798490.jpg?k=c597e62a4ed821db3e6a2e07a6382f9d005fcc179e9f73f599aedb8c447a0de3&amp;o=" alt="Il tuo Relax, photo 2" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src bk">Booking.com</span></div>
+      <h3>Il tuo Relax</h3>
+      <div class="rate"><b>9.7</b>/10 · 288 reviews</div>
+    </div>
+    <div class="price"><b>€88</b><span>total, 1 night · ≈ €88/night</span></div>
+    <ul class="chips"><li>Double/twin, super-king bed</li><li>Breakfast included</li><li>Free street parking</li><li>Garden (pool is summer only)</li><li>Check-in from 14:30 · out 11:00</li></ul>
+    <p class="why">Next door to Bbsupottai, with more reviews. A good fallback if the first two are full.</p>
+    <p class="watch"><span>Check</span> The pool is seasonal, so it won't be open.</p>
+    <div class="btns"><a class="btn" href="https://www.booking.com/hotel/it/il-tuo-relax.html?aid=8132308&amp;checkin=2026-11-02&amp;checkout=2026-11-03&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener">Book on Booking.com ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.930803,8.532134" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g2"><a class="ph" href="https://www.booking.com/hotel/it/domo-la-laguna.html?aid=8132308&amp;checkin=2026-11-02&amp;checkout=2026-11-03&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/464439737.jpg?k=c7f76eb71ef03805eccbbf0f324fec8eb4f58dd6f645718bcf49b9db246e5fec&amp;o=" alt="B&amp;B Domo La Laguna, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.booking.com/hotel/it/domo-la-laguna.html?aid=8132308&amp;checkin=2026-11-02&amp;checkout=2026-11-03&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/692200386.jpg?k=54371c5b9c36c5bca45c345f637b8bcbb6da79d2bd3b4bc8940d42c31ce2a69a&amp;o=" alt="B&amp;B Domo La Laguna, photo 2" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src bk">Booking.com</span></div>
+      <h3>B&amp;B Domo La Laguna</h3>
+      <div class="rate"><b>9.5</b>/10 · 195 reviews</div>
+    </div>
+    <div class="price"><b>€69</b><span>total, 1 night · ≈ €69/night</span></div>
+    <ul class="chips"><li>Double room</li><li>Terrace over the lagoon</li><li>Free street parking</li><li>Self check-in possible</li><li>Check-in from 15:00 · out 10:00</li></ul>
+    <p class="why">The cheapest, on Piazza Stagno at the edge of the Cabras lagoon. Reviewers love the view from the terrace.</p>
+    <p class="watch"><span>Check</span> <b>Breakfast is only served May–October</b>, so it isn't included on these dates. Some reviews mention street noise with the windows open.</p>
+    <div class="btns"><a class="btn" href="https://www.booking.com/hotel/it/domo-la-laguna.html?aid=8132308&amp;checkin=2026-11-02&amp;checkout=2026-11-03&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener">Book on Booking.com ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.929663,8.527402" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g3"><a class="ph" href="https://www.airbnb.com/rooms/1412312160355031116?check_in=2026-11-02&amp;check_out=2026-11-03&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/prohost-api/Hosting-1412312160355031116/original/42dfac64-0bc2-4d30-be63-d22a848f7b0d.jpeg?im_w=720" alt="The House of the Moon, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/1412312160355031116?check_in=2026-11-02&amp;check_out=2026-11-03&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/prohost-api/Hosting-1412312160355031116/original/da1fc6fd-2552-43ae-8ec2-c58946ac7815.jpeg?im_w=720" alt="The House of the Moon, photo 2" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/1412312160355031116?check_in=2026-11-02&amp;check_out=2026-11-03&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/prohost-api/Hosting-1412312160355031116/original/4dd5e98a-7568-4e44-b768-827918fff6ae.jpeg?im_w=720" alt="The House of the Moon, photo 3" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src abnb">Airbnb</span></div>
+      <h3>The House of the Moon</h3>
+      <div class="rate"><b>4.76</b>/5 · 41 reviews</div>
+    </div>
+    <div class="price"><b>€67</b><span>total, 1 night · ≈ €67/night</span></div>
+    <ul class="chips"><li>Whole place · 1 bedroom</li><li>Self check-in (lockbox)</li><li>Heating · A/C · fireplace</li><li>Wi-Fi · washer</li><li>Free street parking</li></ul>
+    <p class="why">The cheapest whole place, and the easiest if you're running late, since you collect the keys from a lockbox at any time.</p>
+    <p class="watch"><span>Check</span> It's on the edge of town (location score 4.4), so you'd drive to dinner. No breakfast, and only basic cooking gear.</p>
+    <div class="btns"><a class="btn" href="https://www.airbnb.com/rooms/1412312160355031116?check_in=2026-11-02&amp;check_out=2026-11-03&amp;adults=2" target="_blank" rel="noopener">Book on Airbnb ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.92529,8.53948" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+  </div>
+  
+</section><section class="base" id="nebida">
+  <header class="base-head">
+    <div class="num">3</div>
+    <div>
+      <p class="eyebrow">Iglesias coast, south-west · 2 nights · 2 adults</p>
+      <h2 class="sec">Nebida / Masua</h2>
+      <p class="dates">Tue 3 Nov → Thu 5 Nov</p>
+    </div>
+  </header>
+  <div class="brief">
+    <dl class="when"><div><dt>Arrive</dt><dd>≈ 18:00, after the Nebida belvedere sunset</dd></div><div><dt>Leave</dt><dd>08:30 on Thu</dd></div><div><dt>Range</dt><dd>€130 – €238 total</dd></div></dl>
+    <div><h4>What matters here</h4><ul class="needs"><li>A <b>sea view towards Pan di Zucchero</b>. The trip doc calls it the best sunset spot of the trip, and you're there for two evenings.</li><li>A kitchen and heating. Masua is shut for the season, and there are only three or four places to eat in Nebida.</li><li>Parking: Nebida is one main road along a cliff, so a space at the house is a plus.</li></ul></div>
+    <div class="pick"><h4>My pick</h4><p><b>Blue Paola Nebida</b>. It's rated 5.0 from 61 reviews and has a private terrace facing Pan di Zucchero, smart-lock self check-in and heating, all for €97 a night. <b>Casa Belvedere</b> is the runner-up if you want private parking.</p></div>
+  </div>
+  <div class="opts">
+<article class="opt">
+  <div class="gal g3"><a class="ph" href="https://www.airbnb.com/rooms/1435585532047161547?check_in=2026-11-03&amp;check_out=2026-11-05&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1435585532047161547/original/7515dd60-7129-4b3b-be56-2b88f6dc542b.jpeg?im_w=720" alt="Blue Paola Nebida, sunsets over Pan di Zucchero, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/1435585532047161547?check_in=2026-11-03&amp;check_out=2026-11-05&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1435585532047161547/original/51e41205-4320-453a-b37d-dd662295a613.jpeg?im_w=720" alt="Blue Paola Nebida, sunsets over Pan di Zucchero, photo 2" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/1435585532047161547?check_in=2026-11-03&amp;check_out=2026-11-05&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1435585532047161547/original/7c9e9f54-8614-47d8-9fbf-083f4c5def5b.jpeg?im_w=720" alt="Blue Paola Nebida, sunsets over Pan di Zucchero, photo 3" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src abnb">Airbnb</span><span class="tag">Top pick</span></div>
+      <h3>Blue Paola Nebida, sunsets over Pan di Zucchero</h3>
+      <div class="rate"><b>5.0</b>/5 · 61 reviews</div>
+    </div>
+    <div class="price"><b>€194</b><span>total, 2 nights · ≈ €97/night</span></div>
+    <ul class="chips"><li>Whole place · 2 bedrooms</li><li>Private panoramic terrace</li><li>Self check-in (smart lock)</li><li>Heating + A/C</li><li>Full kitchen, Nespresso</li><li>Washer</li><li>Free street parking</li></ul>
+    <p class="why">Exactly what the trip doc asks for: a sea-view flat in Nebida for watching the sunset over Pan di Zucchero from the terrace. Perfect scores for cleanliness and check-in, and it's on the main road a few minutes' walk from the belvedere.</p>
+    <p class="watch"><span>Check</span> Parking is on the street, not on the property.</p>
+    <div class="btns"><a class="btn" href="https://www.airbnb.com/rooms/1435585532047161547?check_in=2026-11-03&amp;check_out=2026-11-05&amp;adults=2" target="_blank" rel="noopener">Book on Airbnb ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.31052,8.43849" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g3"><a class="ph" href="https://www.airbnb.com/rooms/807948520823409128?check_in=2026-11-03&amp;check_out=2026-11-05&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6ODA3OTQ4NTIwODIzNDA5MTI4/original/d6ee1ca7-2b6d-45d9-a6d3-0a924839bef0.jpeg?im_w=720" alt="Casa Belvedere, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/807948520823409128?check_in=2026-11-03&amp;check_out=2026-11-05&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/miso/Hosting-807948520823409128/original/6fa03229-0ea0-4818-855d-515405f67254.jpeg?im_w=720" alt="Casa Belvedere, photo 2" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/807948520823409128?check_in=2026-11-03&amp;check_out=2026-11-05&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/miso/Hosting-807948520823409128/original/cab2c6d0-05ce-4cf2-b4fc-df6002114cfa.jpeg?im_w=720" alt="Casa Belvedere, photo 3" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src abnb">Airbnb</span></div>
+      <h3>Casa Belvedere</h3>
+      <div class="rate"><b>4.9</b>/5 · 31 reviews</div>
+    </div>
+    <div class="price"><b>€238</b><span>total, 2 nights · ≈ €119/night</span></div>
+    <ul class="chips"><li>Whole place · 2 bedrooms</li><li>1.5 bathrooms, bathtub</li><li>Sea view</li><li>Free parking on the property</li><li>Self check-in (lockbox)</li><li>Heating + A/C</li><li>Full kitchen, BBQ</li></ul>
+    <p class="why">Close to the belvedere, with a sea view, private parking and a bath after the 11.5 km Cala Domestica loop.</p>
+    <p class="watch"><span>Check</span> €44 more than Blue Paola, and fewer reviews.</p>
+    <div class="btns"><a class="btn" href="https://www.airbnb.com/rooms/807948520823409128?check_in=2026-11-03&amp;check_out=2026-11-05&amp;adults=2" target="_blank" rel="noopener">Book on Airbnb ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.3098,8.4374" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g3"><a class="ph" href="https://www.airbnb.com/rooms/618482059865921945?check_in=2026-11-03&amp;check_out=2026-11-05&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/hosting/Hosting-618482059865921945/original/906daacf-a84e-40a4-a1c2-94e02a4d61a2.jpeg?im_w=720" alt="House in Nebida with courtyard, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/618482059865921945?check_in=2026-11-03&amp;check_out=2026-11-05&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/hosting/Hosting-618482059865921945/original/1777b222-9ced-469a-9759-ec808a5c4337.jpeg?im_w=720" alt="House in Nebida with courtyard, photo 2" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/618482059865921945?check_in=2026-11-03&amp;check_out=2026-11-05&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/hosting/Hosting-618482059865921945/original/c8fbcb5e-11af-4fef-8b47-d73b09bc8d5e.jpeg?im_w=720" alt="House in Nebida with courtyard, photo 3" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src abnb">Airbnb</span></div>
+      <h3>House in Nebida with courtyard</h3>
+      <div class="rate"><b>4.98</b>/5 · 63 reviews</div>
+    </div>
+    <div class="price"><b>€196</b><span>total, 2 nights · ≈ €98/night</span></div>
+    <ul class="chips"><li>Whole house · 2 bedrooms</li><li>Courtyard</li><li>Parking on the property</li><li>Washer</li><li>Wi-Fi · A/C</li><li>Kitchen</li></ul>
+    <p class="why">Very well reviewed, with a courtyard and parking, in the middle of the village.</p>
+    <p class="watch"><span>Check</span> The title says "private parking" but the amenities say "paid parking lot on premises", so ask. <b>No heating</b> is listed, and there's no mention of a sea view.</p>
+    <div class="btns"><a class="btn" href="https://www.airbnb.com/rooms/618482059865921945?check_in=2026-11-03&amp;check_out=2026-11-05&amp;adults=2" target="_blank" rel="noopener">Book on Airbnb ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.3103,8.43784" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g2"><a class="ph" href="https://www.booking.com/hotel/it/splendida-vista-sul-mare-nebida.html?aid=8132308&amp;checkin=2026-11-03&amp;checkout=2026-11-05&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/461962371.jpg?k=b5db03e3ff9dad3658bc82a1ebab096eeba6e0e3b5fe294e06c88dcb957d89c5&amp;o=" alt="Splendida vista sul mare, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.booking.com/hotel/it/splendida-vista-sul-mare-nebida.html?aid=8132308&amp;checkin=2026-11-03&amp;checkout=2026-11-05&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/461965930.jpg?k=53cfd6da65e47d7adaf19fc6416c76390e677dc8ad9b1232a031ef280af3bc41&amp;o=" alt="Splendida vista sul mare, photo 2" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src bk">Booking.com</span></div>
+      <h3>Splendida vista sul mare</h3>
+      <div class="rate"><b>8.9</b>/10 · 45 reviews</div>
+    </div>
+    <div class="price"><b>€214</b><span>total, 2 nights · ≈ €107/night</span></div>
+    <ul class="chips"><li>2-bedroom apartment</li><li>Sea view</li><li>Full kitchen</li><li>Free private parking on site</li><li>Check-in from 17:00 · out 10:00</li></ul>
+    <p class="why">The Booking.com equivalent: a sea-view flat with its own parking, at the north end of Nebida.</p>
+    <p class="watch"><span>Check</span> Rated lower than the Airbnbs. Check-in only opens at 17:00, but you arrive at about 18:00, so that's fine.</p>
+    <div class="btns"><a class="btn" href="https://www.booking.com/hotel/it/splendida-vista-sul-mare-nebida.html?aid=8132308&amp;checkin=2026-11-03&amp;checkout=2026-11-05&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener">Book on Booking.com ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.315093,8.437315" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g2"><a class="ph" href="https://www.booking.com/hotel/it/blue-nest-room-la-margherita-guesthouse.html?aid=8132308&amp;checkin=2026-11-03&amp;checkout=2026-11-05&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/779294300.jpg?k=0b535d42798111c8e379b5226f9cf36a1541ba40278ca0b28b6dbfa8fdfa061f&amp;o=" alt="Margherita Guesthouse Nebida, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.booking.com/hotel/it/blue-nest-room-la-margherita-guesthouse.html?aid=8132308&amp;checkin=2026-11-03&amp;checkout=2026-11-05&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/779304070.jpg?k=460402c645a510a8936c610976fd661732f6fe880ae6e4ce522622e58a4435b6&amp;o=" alt="Margherita Guesthouse Nebida, photo 2" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src bk">Booking.com</span><span class="tag">Budget</span></div>
+      <h3>Margherita Guesthouse Nebida</h3>
+      <div class="rate"><b>8.9</b>/10 · 41 reviews</div>
+    </div>
+    <div class="price"><b>€130</b><span>total, 2 nights · ≈ €65/night</span></div>
+    <ul class="chips"><li>Double room</li><li>Free private parking on site</li><li>Terrace</li><li>A/C · Wi-Fi</li><li>Check-in from 14:00 · out 10:00</li></ul>
+    <p class="why">The cheapest decent bed, on Corso Pan di Zucchero, the same street as Blue Paola.</p>
+    <p class="watch"><span>Check</span> Just a room: no kitchen, no breakfast and no sea view listed. <b>Check-in outside their hours costs extra</b>, so agree on a time.</p>
+    <div class="btns"><a class="btn" href="https://www.booking.com/hotel/it/blue-nest-room-la-margherita-guesthouse.html?aid=8132308&amp;checkin=2026-11-03&amp;checkout=2026-11-05&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener">Book on Booking.com ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.31109,8.437153" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+  </div>
+  
+</section><section class="base" id="villasimius">
+  <header class="base-head">
+    <div class="num">4</div>
+    <div>
+      <p class="eyebrow">Capo Carbonara, south-east · 2 nights · 2 adults</p>
+      <h2 class="sec">Villasimius</h2>
+      <p class="dates">Thu 5 Nov → Sat 7 Nov</p>
+    </div>
+  </header>
+  <div class="brief">
+    <dl class="when"><div><dt>Arrive</dt><dd>≈ 19:30, after dark from the Sella del Diavolo</dd></div><div><dt>Leave</dt><dd><b>06:15 on Sat</b> for the 09:20 flight</dd></div><div><dt>Range</dt><dd>€132 – €272 total</dd></div></dl>
+    <div><h4>What matters here</h4><ul class="needs"><li>Late arrival on Thursday <b>and</b> an unstaffed 06:15 departure on Saturday, so you need to be able to leave the key without anyone there.</li><li>Parking at the door, since you load the car the night before.</li><li>In the village, so you can walk to dinner. The trip doc lists La Lanterna, Sa Tankitta and Doppio Malto.</li></ul></div>
+    <div class="pick"><h4>My pick</h4><p><b>Hotel Il Girasole</b>. It's rated 9.6, costs €136 for both nights with breakfast and has parking on site. Ask them about leaving at 06:15 before you book. If you'd rather not rely on a hotel for that, the <b>Panoramic View garden flat</b> has a lockbox, so arriving late and leaving early need no one.</p></div>
+  </div>
+  <div class="opts">
+<article class="opt">
+  <div class="gal g2"><a class="ph" href="https://www.booking.com/hotel/it/il-girasole-villasimius1.html?aid=8132308&amp;checkin=2026-11-05&amp;checkout=2026-11-07&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/478108611.jpg?k=0379665524542e45b4c42d22e41d9b8b4f14e4d0ed7fcd8eb91efb245ad939d1&amp;o=" alt="Hotel Il Girasole, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.booking.com/hotel/it/il-girasole-villasimius1.html?aid=8132308&amp;checkin=2026-11-05&amp;checkout=2026-11-07&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/478108508.jpg?k=7466334767436e095fa4d2da78da56e3879c099cf71f1357a4f6ad45775d5c4f&amp;o=" alt="Hotel Il Girasole, photo 2" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src bk">Booking.com</span><span class="tag">Top pick</span></div>
+      <h3>Hotel Il Girasole</h3>
+      <div class="rate"><b>9.6</b>/10 · 201 reviews</div>
+    </div>
+    <div class="price"><b>€136</b><span>total, 2 nights · ≈ €68/night</span></div>
+    <ul class="chips"><li>Standard double</li><li>Breakfast included</li><li>Free parking on site</li><li>Garden · terrace</li><li>Check-in from 14:30 · out 10:30</li></ul>
+    <p class="why">Very cheap for how well it's rated, in a quiet street a few minutes' walk from Via Roma. You get breakfast on Friday morning before the Costa Rei day.</p>
+    <p class="watch"><span>Check</span> Ask them now how a 06:15 Saturday departure works (a key drop?), and say you'll arrive at about 19:30.</p>
+    <div class="btns"><a class="btn" href="https://www.booking.com/hotel/it/il-girasole-villasimius1.html?aid=8132308&amp;checkin=2026-11-05&amp;checkout=2026-11-07&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener">Book on Booking.com ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.14737,9.520945" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g3"><a class="ph" href="https://www.airbnb.com/rooms/1592665791628914977?check_in=2026-11-05&amp;check_out=2026-11-07&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1592665791628914977/original/7df0c1aa-1d63-44d9-89e0-aded9ca4d50a.jpeg?im_w=720" alt="[Panoramic View] Garden in the centre, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/1592665791628914977?check_in=2026-11-05&amp;check_out=2026-11-07&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1592665791628914977/original/0f47982c-b83e-41e8-904d-6c5a76c430f1.jpeg?im_w=720" alt="[Panoramic View] Garden in the centre, photo 2" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/1592665791628914977?check_in=2026-11-05&amp;check_out=2026-11-07&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1592665791628914977/original/166c8917-b6ef-40ed-9b2f-8d77ee6575b2.jpeg?im_w=720" alt="[Panoramic View] Garden in the centre, photo 3" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src abnb">Airbnb</span></div>
+      <h3>[Panoramic View] Garden in the centre</h3>
+      <div class="rate"><b>5.0</b>/5 · 7 reviews</div>
+    </div>
+    <div class="price"><b>€216</b><span>total, 2 nights · ≈ €108/night</span></div>
+    <ul class="chips"><li>Whole place · 2 bedrooms</li><li>Self check-in (lockbox)</li><li>Fenced private garden, BBQ</li><li>Heating + A/C</li><li>Full kitchen, espresso machine</li><li>Free street parking</li></ul>
+    <p class="why">The easiest for your timing, because the lockbox means you need no one when you arrive or leave. It's in the village centre, with a garden and a kitchen for a slow last evening.</p>
+    <p class="watch"><span>Check</span> Only 7 reviews, all 5 stars. Parking is on the street.</p>
+    <div class="btns"><a class="btn" href="https://www.airbnb.com/rooms/1592665791628914977?check_in=2026-11-05&amp;check_out=2026-11-07&amp;adults=2" target="_blank" rel="noopener">Book on Airbnb ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.1439,9.5103" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g2"><a class="ph" href="https://www.booking.com/hotel/it/b-amp-b-ametista-villasimius.html?aid=8132308&amp;checkin=2026-11-05&amp;checkout=2026-11-07&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/547820838.jpg?k=0e09b5d41deb763e0a09cf15d9a7e3e20a1d731f76a3c87d4c1f46699bd49d13&amp;o=" alt="B&amp;B Ametista, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.booking.com/hotel/it/b-amp-b-ametista-villasimius.html?aid=8132308&amp;checkin=2026-11-05&amp;checkout=2026-11-07&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/547833874.jpg?k=f6dfedc29edf70a04c762f1f2b666927fecd59aefb6bfb6359277247d16b23ea&amp;o=" alt="B&amp;B Ametista, photo 2" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src bk">Booking.com</span></div>
+      <h3>B&amp;B Ametista</h3>
+      <div class="rate"><b>9.7</b>/10 · 169 reviews</div>
+    </div>
+    <div class="price"><b>€200</b><span>total, 2 nights · ≈ €100/night</span></div>
+    <ul class="chips"><li>Double room with balcony</li><li>Breakfast included</li><li>Free parking on site</li><li>Check-in from 15:00 · out 09:30</li></ul>
+    <p class="why">The best-rated B&B in the village, on Via Dante, a short walk from the centre.</p>
+    <p class="watch"><span>Check</span> Ask about the 06:15 key drop. It costs €64 more than Il Girasole for a similar setup.</p>
+    <div class="btns"><a class="btn" href="https://www.booking.com/hotel/it/b-amp-b-ametista-villasimius.html?aid=8132308&amp;checkin=2026-11-05&amp;checkout=2026-11-07&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener">Book on Booking.com ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.144943,9.522235" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g2"><a class="ph" href="https://www.booking.com/hotel/it/sa-cralla.html?aid=8132308&amp;checkin=2026-11-05&amp;checkout=2026-11-07&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/309573243.jpg?k=7ffcd540ca2796094a7ac3c38ddb6523eae6288ebfc0dd44445c929637969734&amp;o=" alt="Hotel Sa Cralla, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.booking.com/hotel/it/sa-cralla.html?aid=8132308&amp;checkin=2026-11-05&amp;checkout=2026-11-07&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/147531330.jpg?k=7926b093a3e5e91b8c1b8ec280aef5c7c8dae466f19418ba3d7fa62dc16d7c22&amp;o=" alt="Hotel Sa Cralla, photo 2" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src bk">Booking.com</span><span class="tag">Budget</span></div>
+      <h3>Hotel Sa Cralla</h3>
+      <div class="rate"><b>9.3</b>/10 · 131 reviews</div>
+    </div>
+    <div class="price"><b>€132</b><span>total, 2 nights · ≈ €66/night</span></div>
+    <ul class="chips"><li>Superior double/twin</li><li>Buffet breakfast included</li><li>Free parking</li><li>Check-in from 15:30 · out 10:00</li></ul>
+    <p class="why">The cheapest well-rated hotel, in a quiet street near the centre.</p>
+    <p class="watch"><span>Check</span> <b>Arrivals after 20:30 pay a surcharge</b>. You should be in by about 19:30, but there's little margin on the longest driving day.</p>
+    <div class="btns"><a class="btn" href="https://www.booking.com/hotel/it/sa-cralla.html?aid=8132308&amp;checkin=2026-11-05&amp;checkout=2026-11-07&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener">Book on Booking.com ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.142049,9.519567" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g2"><a class="ph" href="https://www.booking.com/hotel/it/casa-camilla-villasimius.html?aid=8132308&amp;checkin=2026-11-05&amp;checkout=2026-11-07&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/690202739.jpg?k=58cbed5c624431e58254a643a88a57bbcb7f11da8f2ef4176954753520014614&amp;o=" alt="Casa Camilla, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.booking.com/hotel/it/casa-camilla-villasimius.html?aid=8132308&amp;checkin=2026-11-05&amp;checkout=2026-11-07&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/690202622.jpg?k=dce90a6a54f8c4e207a4e09111f3e627bd28d1eab19cd0651886ddea9de12ba9&amp;o=" alt="Casa Camilla, photo 2" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src bk">Booking.com</span></div>
+      <h3>Casa Camilla</h3>
+      <div class="rate"><b>9.3</b>/10 · 39 reviews</div>
+    </div>
+    <div class="price"><b>€209.20</b><span>total, 2 nights · ≈ €105/night</span></div>
+    <ul class="chips"><li>Whole 2-bedroom house</li><li>Kitchenette</li><li>Free parking</li><li>Terrace, BBQ</li><li>Check-in from 15:00 · out 10:00</li></ul>
+    <p class="why">A whole house with free parking in the village, for the Booking.com price of a hotel room.</p>
+    <p class="watch"><span>Check</span> No breakfast. Ask how check-in and the early check-out work.</p>
+    <div class="btns"><a class="btn" href="https://www.booking.com/hotel/it/casa-camilla-villasimius.html?aid=8132308&amp;checkin=2026-11-05&amp;checkout=2026-11-07&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener">Book on Booking.com ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.143707,9.514815" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+<article class="opt">
+  <div class="gal g3"><a class="ph" href="https://www.airbnb.com/rooms/33939250?check_in=2026-11-05&amp;check_out=2026-11-07&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/3219a284-c859-4224-86f4-db67dd178d3c.jpg?im_w=720" alt="Villa Lunetta, 300 m from the sea, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/33939250?check_in=2026-11-05&amp;check_out=2026-11-07&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/07b458a0-32b4-4f67-a9b4-13471e8af250.jpg?im_w=720" alt="Villa Lunetta, 300 m from the sea, photo 2" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/33939250?check_in=2026-11-05&amp;check_out=2026-11-07&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/3dc8e18c-3b9e-4a25-8eaa-374df4bfe614.jpg?im_w=720" alt="Villa Lunetta, 300 m from the sea, photo 3" loading="lazy" referrerpolicy="no-referrer"></a></div>
+  <div class="opt-body">
+    <div class="opt-head">
+      <div><span class="src abnb">Airbnb</span></div>
+      <h3>Villa Lunetta, 300 m from the sea</h3>
+      <div class="rate"><b>4.8</b>/5 · 30 reviews</div>
+    </div>
+    <div class="price"><b>€272</b><span>total, 2 nights · ≈ €136/night</span></div>
+    <ul class="chips"><li>Whole townhouse · 2 bedrooms</li><li>Driveway parking</li><li>Sea view · garden, hammock</li><li>Fireplace · heating</li><li>Full kitchen</li></ul>
+    <p class="why">The "by the sea" option. It's near Porto Luna, south-east of the village towards Capo Carbonara, and 5 minutes' drive from the centre.</p>
+    <p class="watch"><span>Check</span> The host meets you in person, so the 06:15 departure needs arranging. You'd drive to dinner.</p>
+    <div class="btns"><a class="btn" href="https://www.airbnb.com/rooms/33939250?check_in=2026-11-05&amp;check_out=2026-11-07&amp;adults=2" target="_blank" rel="noopener">Book on Airbnb ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.1341,9.53771" target="_blank" rel="noopener">Map ↗</a></div>
+  </div>
+</article>
+  </div>
+  
+</section>
+<section class="base zain" id="zain">
+  <header class="base-head"><div class="num">Z</div><div><p class="eyebrow">Elmas / Cagliari · 1 night · 1 adult</p><h2 class="sec">Zain near the airport</h2><p class="dates">Sat 31 Oct → Sun 1 Nov</p></div></header>
+  <p class="lead">If Zain takes Option A and drives down on Saturday afternoon, both of these are 5–6 km from the terminal and confirm a 06:00 check-out is fine. He arrives at about 17:15.</p>
+  <div class="zopts"><article class="zopt">
+  <a class="ph" href="https://www.booking.com/hotel/it/serendipity-elmas.html?aid=8132308&amp;checkin=2026-10-31&amp;checkout=2026-11-01&amp;no_rooms=1&amp;group_adults=1&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/891602598.jpg?k=9fcb2ac0f40baae197c1a382f50dfc8071711f11473a40b0ced6b6b082affc93&amp;o=" alt="Serendipity, Elmas" loading="lazy" referrerpolicy="no-referrer"></a>
+  <div><span class="src bk">Booking.com</span><h3>Serendipity, Elmas</h3>
+  <div class="rate"><b>9.7</b>/10 · 20 reviews</div>
+  <div class="price"><b>€87.30</b><span>1 night, 1 adult</span></div>
+  <ul class="chips"><li>Apartment</li><li>Free private parking on site</li><li>Check-in from 15:00</li><li>≈ 5 km to CAG</li></ul>
+  <div class="btns"><a class="btn" href="https://www.booking.com/hotel/it/serendipity-elmas.html?aid=8132308&amp;checkin=2026-10-31&amp;checkout=2026-11-01&amp;no_rooms=1&amp;group_adults=1&amp;selected_currency=EUR" target="_blank" rel="noopener">Book on Booking.com ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.269341,9.045416" target="_blank" rel="noopener">Map ↗</a></div></div>
+</article><article class="zopt">
+  <a class="ph" href="https://www.booking.com/hotel/it/il-vialetto-elmas.html?aid=8132308&amp;checkin=2026-10-31&amp;checkout=2026-11-01&amp;no_rooms=1&amp;group_adults=1&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/712436820.jpg?k=97c0ece1fc6dce9840f67da0aa45fe57344f533325e30182a7790e5ce4828a6b&amp;o=" alt="Il Vialetto, Elmas" loading="lazy" referrerpolicy="no-referrer"></a>
+  <div><span class="src bk">Booking.com</span><h3>Il Vialetto, Elmas</h3>
+  <div class="rate"><b>9.5</b>/10 · 67 reviews</div>
+  <div class="price"><b>€100</b><span>1 night, 1 adult</span></div>
+  <ul class="chips"><li>B&amp;B</li><li>Free parking nearby</li><li>Check-in from 17:00</li><li>≈ 6 km to CAG</li></ul>
+  <div class="btns"><a class="btn" href="https://www.booking.com/hotel/it/il-vialetto-elmas.html?aid=8132308&amp;checkin=2026-10-31&amp;checkout=2026-11-01&amp;no_rooms=1&amp;group_adults=1&amp;selected_currency=EUR" target="_blank" rel="noopener">Book on Booking.com ↗</a><a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=39.270003,9.044664" target="_blank" rel="noopener">Map ↗</a></div></div>
+</article></div>
+</section>
+
+<footer class="foot muted small">
+  <p>Searched with the Airbnb and Booking.com connectors on 26 Oct 2026. Booking.com details (check-in times, breakfast, parking) come from Booking's own property Q&amp;A, and Airbnb details from each listing's amenity list. Photos load from Airbnb and Booking.com and belong to the hosts. <a href="sardegna-trip-v2.html">Back to the trip</a>.</p>
+</footer>
+</div>
+</body>
+</html>
