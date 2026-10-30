@@ -108,6 +108,11 @@ h1 span{color:var(--sea)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .src{color:#0D1719}}
 :root[data-theme="dark"] .src{color:#0D1719}
 .tag{display:inline-block;margin-left:6px;font-family:var(--ui);font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:1px 7px;border-radius:3px;color:var(--maquis);box-shadow:inset 0 0 0 1.5px var(--maquis)}
+.tag.booked{background:var(--maquis);color:var(--card);box-shadow:none}
+.opt.booked{border:2px solid var(--maquis)}
+.combos.booked{min-width:640px}
+.combos.booked tbody th{font-size:18px;color:var(--maquis)}
+.combos.booked td b{display:block;font-weight:600}
 .rate{font-family:var(--ui);font-size:14px;color:var(--muted);margin-top:2px}
 .rate b{color:var(--ink);font-size:15px}
 .price{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-family:var(--ui)}
@@ -153,9 +158,22 @@ h1 span{color:var(--sea)}
 <header class="top">
   <p class="eyebrow"><a href="index.html">← Sardegna Road Trip V2</a></p>
   <h1>Where we <span>sleep</span></h1>
-  <p class="sub">Four bases, 8 nights, 30 Oct – 7 Nov 2026. Every option below was checked on Airbnb and Booking.com on 26 Oct and re-checked on 28 Oct (Cala Gonone is already booked, so that section is as it was). Cala Gonone was searched for 3 adults so Zain is covered on Friday night, and the rest for 2. The prices are the totals each site quoted.</p>
-  <nav class="jump"><a href="#gonone"><b>1</b> Cala Gonone <span>3n</span></a><a href="#cabras"><b>2</b> Cabras <span>1n</span></a><a href="#nebida"><b>3</b> Nebida / Masua <span>2n</span></a><a href="#villasimius"><b>4</b> Villasimius <span>2n</span></a><a href="#zain"><b>Z</b> Zain <span>opt.</span></a></nav>
+  <p class="sub">Four bases, 8 nights, 30 Oct – 7 Nov 2026. <b>All four are booked</b> (status from Basecamp, 29 Oct): the first table shows what we took and what's still to sort out with each host. The options I compared on 26 and 28 Oct are kept below for reference. Cala Gonone is booked for 3 adults, so Zain is covered for all three nights there.</p>
+  <nav class="jump"><a href="#gonone"><b>1</b> Cala Gonone <span>3n</span></a><a href="#cabras"><b>2</b> Cabras <span>1n</span></a><a href="#nebida"><b>3</b> Nebida / Masua <span>2n</span></a><a href="#villasimius"><b>4</b> Villasimius <span>2n</span></a><a href="#zain"><b>Z</b> Zain <span>not needed</span></a></nav>
 </header>
+
+<section class="block" id="booked">
+  <h2 class="sec">What we booked</h2>
+  <p class="muted small">Booking numbers, PINs and the hosts' private numbers are in the Basecamp to-dos and the booking emails, not on this public page.</p>
+  <div class="tablewrap"><table class="combos booked">
+<thead><tr><th></th><th>Place</th><th>Nights</th><th>Paid</th><th>Arrival and departure</th></tr></thead>
+<tbody>
+<tr><th>1 Cala Gonone</th><td><a href="#gonone">Appartamento a 50 mt dal mare</a><span>Via delle Stelle Marine 4 · Booking.com</span></td><td><b>Fri 30 Oct → Mon 2 Nov</b><span>3 nights · 3 adults</span></td><td><b>€300, paid</b><span>City tax €13.50 due on arrival</span></td><td>The host meets you in person at about 19:00 (no self check-in). Arrival time, parking for two cars and the keys asked on 29 Oct. Out 08:00–10:00; you leave 08:45 on Mon.</td></tr>
+<tr><th>2 Cabras</th><td><a href="#cabras">Torremana</a><span>Via Sassari 37 · Booking.com · breakfast</span></td><td><b>Mon 2 → Tue 3 Nov</b><span>1 night</span></td><td><b>€90 at the property</b><span>+ city tax €2 pp; bring ID and a credit card</span></td><td>✅ Arrival 18:00–19:00 approved. Asked on 29 Oct for breakfast at ≈ 07:30 and an early check-out (you leave 08:15). Free street parking in front.</td></tr>
+<tr><th>3 Nebida</th><td><a href="#nebida">Blue Paola Nebida</a><span>Via Fontana Chessa 23 · Airbnb</span></td><td><b>Tue 3 → Thu 5 Nov</b><span>2 nights</span></td><td><b>$216.43, paid</b><span>No longer refundable</span></td><td>Smart-lock self check-in from 16:00; you arrive ≈ 18:00. <b>Still to do:</b> get the code, ask about parking and heating. Out by 11:00; you leave 08:30.</td></tr>
+<tr><th>4 Villasimius</th><td><a href="#villasimius">Hotel Il Girasole</a><span>Via Masaccio 6 · Booking.com · breakfast</span></td><td><b>Thu 5 → Sat 7 Nov</b><span>2 nights</span></td><td><b>€153 at the property</b><span>Non-refundable; pay on Fri evening</span></td><td>✅ Arrival 19:00–20:00 approved. <b>Still to do:</b> agree a key drop, since you leave at 06:15 on Sat, before reception opens.</td></tr>
+</tbody></table></div>
+</section>
 
 <section class="block">
   <h2 class="sec">Three ways to book it</h2>
@@ -183,11 +201,11 @@ h1 span{color:var(--sea)}
     <div class="pick"><h4>My pick</h4><p><b>Appartamento a 50 mt dal mare</b> or <b>Apartment Altomare</b>. They're on the same street, 2-bed, rated 9.2–9.3 and €105–110 a night all in, two minutes' walk from the seafront. For more comfort, go for the <b>Penthouse</b>, the only one with heating, two bathrooms and a sea-view veranda.</p></div>
   </div>
   <div class="opts">
-<article class="opt">
+<article class="opt booked">
   <div class="gal g2"><a class="ph" href="https://www.booking.com/hotel/it/appartamento-a-50-mt-dal-mare-cala-gonone.html?aid=8132308&amp;checkin=2026-10-30&amp;checkout=2026-11-02&amp;no_rooms=1&amp;group_adults=3&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/544143277.jpg?k=5230ab47213a24b75a7375fae7029e230460a21308933a3545c4d88709bf3c45&amp;o=" alt="Appartamento a 50 mt dal mare, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.booking.com/hotel/it/appartamento-a-50-mt-dal-mare-cala-gonone.html?aid=8132308&amp;checkin=2026-10-30&amp;checkout=2026-11-02&amp;no_rooms=1&amp;group_adults=3&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/484684430.jpg?k=657954cab9750c4bdc8e53398effc1853d22fa7ebb89b04362e8ecd4005385f0&amp;o=" alt="Appartamento a 50 mt dal mare, photo 2" loading="lazy" referrerpolicy="no-referrer"></a></div>
   <div class="opt-body">
     <div class="opt-head">
-      <div><span class="src bk">Booking.com</span><span class="tag">Best value</span></div>
+      <div><span class="src bk">Booking.com</span><span class="tag booked">Booked</span></div>
       <h3>Appartamento a 50 mt dal mare</h3>
       <div class="rate"><b>9.3</b>/10 · 125 reviews</div>
     </div>
@@ -275,11 +293,11 @@ h1 span{color:var(--sea)}
     <div class="pick"><h4>My pick</h4><p><b>Torremana</b>. It's rated 9.9 from 471 reviews and breakfast is included, all for €94. If it's full, take <b>Bbsupottai</b> or <b>Il tuo Relax</b>, which are next door to each other on Via Garibaldi and just as good. Ask all of them for breakfast at about 07:30.</p></div>
   </div>
   <div class="opts">
-<article class="opt">
+<article class="opt booked">
   <div class="gal g2"><a class="ph" href="https://www.booking.com/hotel/it/torremana-cabras.html?aid=8132308&amp;checkin=2026-11-02&amp;checkout=2026-11-03&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/416453307.jpg?k=f609054e82efd3c4cd91b64db15d5baf2b4805059be7f162358de57a8a1b892e&amp;o=" alt="Torremana, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.booking.com/hotel/it/torremana-cabras.html?aid=8132308&amp;checkin=2026-11-02&amp;checkout=2026-11-03&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/416453642.jpg?k=206dbd49a0d2761f29440f32ea7c3ba5d26c70b9c4afe5f6b454a58e5e2ccadf&amp;o=" alt="Torremana, photo 2" loading="lazy" referrerpolicy="no-referrer"></a></div>
   <div class="opt-body">
     <div class="opt-head">
-      <div><span class="src bk">Booking.com</span><span class="tag">Top pick</span></div>
+      <div><span class="src bk">Booking.com</span><span class="tag booked">Booked</span></div>
       <h3>Torremana</h3>
       <div class="rate"><b>9.9</b>/10 · 472 reviews</div>
     </div>
@@ -367,11 +385,11 @@ h1 span{color:var(--sea)}
     <div class="pick"><h4>My pick</h4><p><b>Blue Paola Nebida</b>. It's rated 5.0 from 61 reviews and has a private terrace facing Pan di Zucchero, smart-lock self check-in and heating, all for €97 a night. <b>Casa Belvedere</b> is the runner-up if you want private parking.</p></div>
   </div>
   <div class="opts">
-<article class="opt">
+<article class="opt booked">
   <div class="gal g3"><a class="ph" href="https://www.airbnb.com/rooms/1435585532047161547?check_in=2026-11-03&amp;check_out=2026-11-05&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1435585532047161547/original/7515dd60-7129-4b3b-be56-2b88f6dc542b.jpeg?im_w=720" alt="Blue Paola Nebida, sunsets over Pan di Zucchero, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/1435585532047161547?check_in=2026-11-03&amp;check_out=2026-11-05&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1435585532047161547/original/51e41205-4320-453a-b37d-dd662295a613.jpeg?im_w=720" alt="Blue Paola Nebida, sunsets over Pan di Zucchero, photo 2" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.airbnb.com/rooms/1435585532047161547?check_in=2026-11-03&amp;check_out=2026-11-05&amp;adults=2" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/hosting/Hosting-1435585532047161547/original/7c9e9f54-8614-47d8-9fbf-083f4c5def5b.jpeg?im_w=720" alt="Blue Paola Nebida, sunsets over Pan di Zucchero, photo 3" loading="lazy" referrerpolicy="no-referrer"></a></div>
   <div class="opt-body">
     <div class="opt-head">
-      <div><span class="src abnb">Airbnb</span><span class="tag">Top pick</span></div>
+      <div><span class="src abnb">Airbnb</span><span class="tag booked">Booked</span></div>
       <h3>Blue Paola Nebida, sunsets over Pan di Zucchero</h3>
       <div class="rate"><b>5.0</b>/5 · 61 reviews</div>
     </div>
@@ -459,11 +477,11 @@ h1 span{color:var(--sea)}
     <div class="pick"><h4>My pick</h4><p><b>Hotel Il Girasole</b>. It's rated 9.6, costs €136 for both nights with breakfast and has parking on site. Ask them about leaving at 06:15 before you book. If you'd rather not rely on a hotel for that, the <b>Panoramic View garden flat</b> has a lockbox, so arriving late and leaving early need no one.</p></div>
   </div>
   <div class="opts">
-<article class="opt">
+<article class="opt booked">
   <div class="gal g2"><a class="ph" href="https://www.booking.com/hotel/it/il-girasole-villasimius1.html?aid=8132308&amp;checkin=2026-11-05&amp;checkout=2026-11-07&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/478108611.jpg?k=0379665524542e45b4c42d22e41d9b8b4f14e4d0ed7fcd8eb91efb245ad939d1&amp;o=" alt="Hotel Il Girasole, photo 1" loading="lazy" referrerpolicy="no-referrer"></a><a class="ph" href="https://www.booking.com/hotel/it/il-girasole-villasimius1.html?aid=8132308&amp;checkin=2026-11-05&amp;checkout=2026-11-07&amp;no_rooms=1&amp;group_adults=2&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/478108508.jpg?k=7466334767436e095fa4d2da78da56e3879c099cf71f1357a4f6ad45775d5c4f&amp;o=" alt="Hotel Il Girasole, photo 2" loading="lazy" referrerpolicy="no-referrer"></a></div>
   <div class="opt-body">
     <div class="opt-head">
-      <div><span class="src bk">Booking.com</span><span class="tag">Top pick</span></div>
+      <div><span class="src bk">Booking.com</span><span class="tag booked">Booked</span></div>
       <h3>Hotel Il Girasole</h3>
       <div class="rate"><b>9.6</b>/10 · 202 reviews</div>
     </div>
@@ -554,7 +572,7 @@ h1 span{color:var(--sea)}
 </section>
 <section class="base zain" id="zain">
   <header class="base-head"><div class="num">Z</div><div><p class="eyebrow">Elmas / Cagliari · 1 night · 1 adult</p><h2 class="sec">Zain near the airport</h2><p class="dates">Sat 31 Oct → Sun 1 Nov</p></div></header>
-  <p class="lead">If Zain takes Option A and drives down on Saturday afternoon, Il Vialetto is 5–6 km from the terminal. Ask whether a 06:00 check-out is fine. He arrives at about 17:15.</p>
+  <p class="lead"><b>Not needed any more.</b> Zain stays in Cala Gonone on Saturday night (the flat is booked for 3 adults), comes to the Su Gologone dinner, and drives to the airport at about 03:15 on Sunday. The options below are kept only in case that changes.</p>
   <div class="zopts"><article class="zopt">
   <a class="ph" href="https://www.booking.com/hotel/it/il-vialetto-elmas.html?aid=8132308&amp;checkin=2026-10-31&amp;checkout=2026-11-01&amp;no_rooms=1&amp;group_adults=1&amp;selected_currency=EUR" target="_blank" rel="noopener"><img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/712436820.jpg?k=97c0ece1fc6dce9840f67da0aa45fe57344f533325e30182a7790e5ce4828a6b&amp;o=" alt="Il Vialetto, Elmas" loading="lazy" referrerpolicy="no-referrer"></a>
   <div><span class="src bk">Booking.com</span><h3>Il Vialetto, Elmas</h3>
