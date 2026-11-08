@@ -39,6 +39,10 @@ li+li{margin-top:6px}
 .small{font-size:14px}
 .eyebrow{font-family:var(--ui);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .crumbs{font-family:var(--ui);font-size:14px;padding-bottom:18px}
+.lang-switch{display:inline-flex;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:2px;font-family:var(--ui);font-size:13px;font-weight:600;gap:2px}
+.lang-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:4px;text-decoration:none;color:var(--muted);line-height:1.2;font-size:12px;transition:background .15s,color .15s}
+.lang-btn:hover{color:var(--ink);background:var(--sea-soft);text-decoration:none}
+.lang-btn.active{background:var(--sea);color:var(--paper);cursor:default}
 
 /* header */
 .top{display:grid;gap:14px;padding-bottom:26px;border-bottom:1px solid var(--line)}
@@ -114,7 +118,13 @@ blockquote{margin:0;padding:10px 14px;border-left:3px solid var(--sea);backgroun
 </style></head>
 <body><div class="wrap">
 
-<nav class="crumbs"><a href="index.html">← Sardegna Road Trip V2</a></nav>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:18px;flex-wrap:wrap">
+  <nav class="crumbs" style="padding-bottom:0"><a href="index.html">← Sardegna Road Trip V2</a></nav>
+  <div class="lang-switch" aria-label="Language selection">
+    <span class="lang-btn active" title="English">🇬🇧 EN</span>
+    <a class="lang-btn" href="lt/car_rental.html" title="Lietuvių k.">🇱🇹 LT</a>
+  </div>
+</div>
 
 <header class="top">
   <div class="eyebrow">Sardegna V2 · car rental · booked Thu 29 Oct 2026 · prices checked Mon 26 Oct</div>

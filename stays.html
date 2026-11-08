@@ -43,6 +43,10 @@ p{margin:0}
 .eyebrow{font-family:var(--ui);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .eyebrow a{color:inherit;text-decoration:none}
 .eyebrow a:hover{color:var(--sea)}
+.lang-switch{display:inline-flex;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:2px;font-family:var(--ui);font-size:13px;font-weight:600;gap:2px}
+.lang-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:4px;text-decoration:none;color:var(--muted);line-height:1.2;font-size:12px;transition:background .15s,color .15s}
+.lang-btn:hover{color:var(--ink);background:var(--sea-soft);text-decoration:none}
+.lang-btn.active{background:var(--sea);color:var(--paper);cursor:default}
 
 /* header */
 .top{display:grid;gap:14px;padding-bottom:24px;border-bottom:1px solid var(--line)}
@@ -156,7 +160,13 @@ h1 span{color:var(--sea)}
 <body>
 <div class="wrap">
 <header class="top">
-  <p class="eyebrow"><a href="index.html">← Sardegna Road Trip V2</a></p>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+    <p class="eyebrow" style="margin:0"><a href="index.html">← Sardegna Road Trip V2</a></p>
+    <div class="lang-switch" aria-label="Language selection">
+      <span class="lang-btn active" title="English">🇬🇧 EN</span>
+      <a class="lang-btn" href="lt/stays.html" title="Lietuvių k.">🇱🇹 LT</a>
+    </div>
+  </div>
   <h1>Where we <span>sleep</span></h1>
   <p class="sub">Four bases, 8 nights, 30 Oct – 7 Nov 2026. <b>All four are booked</b> (status from Basecamp, 29 Oct): the first table shows what we took and what's still to sort out with each host. The options I compared on 26 and 28 Oct are kept below for reference. Cala Gonone is booked for 3 adults, so Zain is covered for all three nights there.</p>
   <nav class="jump"><a href="#gonone"><b>1</b> Cala Gonone <span>3n</span></a><a href="#cabras"><b>2</b> Cabras <span>1n</span></a><a href="#nebida"><b>3</b> Nebida / Masua <span>2n</span></a><a href="#villasimius"><b>4</b> Villasimius <span>2n</span></a><a href="#zain"><b>Z</b> Zain <span>not needed</span></a></nav>
